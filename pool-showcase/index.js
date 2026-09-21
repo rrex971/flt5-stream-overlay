@@ -69,7 +69,7 @@ const normalizeEntry = value => {
 
 const resolveEntry = data => {
     const id = String(data.beatmap?.id ?? '');
-    if (config[id]) return normalizeEntry(config[id]);
+    if (config.maps?.[id]) return normalizeEntry(config.maps[id]);
     const searchable = `${data.beatmap?.artist ?? ''} ${data.beatmap?.title ?? ''} ${data.beatmap?.version ?? ''}`.toLowerCase();
     for (const [fragment, value] of Object.entries(config.custom || {})) {
         if (searchable.includes(fragment.toLowerCase())) return normalizeEntry(value);
@@ -259,17 +259,19 @@ const applyData = data => {
 const applyPreview = () => {
     const firstSlot = config.slots?.[0];
     if (!firstSlot) return;
-    const preview = Object.entries(config).find(([key, value]) => /^\d+$/.test(key) && normalizeEntry(value).slot === firstSlot);
+    const preview = Object.entries(config.maps || {}).find(([, value]) => normalizeEntry(value).slot === firstSlot);
     if (preview) applyEntry(normalizeEntry(preview[1]));
 };
 
 const loadConfig = async () => {
     try {
-        const response = await fetch(`mappool.json?t=${Date.now()}`, { cache: 'no-store' });
+        const response = await fetch(`../mappools.json?t=${Date.now()}`, { cache: 'no-store' });
         if (!response.ok) throw new Error(String(response.status));
-        config = await response.json();
+        const pools = await response.json();
+        const params = new URLSearchParams(location.search);
+        config = pools[params.get('pool') || 'finals'] || { round: '', slots: [], maps: {}, custom: {} };
     } catch {
-        config = { round: '', slots: [], custom: {} };
+        config = { round: '', slots: [], maps: {}, custom: {} };
     }
     const params = new URLSearchParams(location.search);
     ui.round.textContent = params.get('round') || config.round || '';

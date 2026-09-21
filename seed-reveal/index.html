@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FLT5 Seed Reveal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main id="overlay">
+        <img class="background-art" src="../assets/showcase-background.png" alt="">
+        <header class="brand-row">
+            <div class="logo-crop"><img src="../assets/flt5-logo.png" alt="FLT5"></div>
+            <h1 class="sticker-title"><span>SEED</span><span>REVEAL</span></h1>
+            <div class="top-loops" aria-hidden="true">
+                <img src="../assets/loops/blue.png" alt="">
+                <img src="../assets/loops/pink.png" alt="">
+                <img src="../assets/loops/yellow.png" alt="">
+                <img src="../assets/loops/purple.png" alt="">
+                <img src="../assets/loops/orange.png" alt="">
+            </div>
+            <div class="round-sticker"><span>QUALIFIERS</span></div>
+        </header>
+        <section class="result" id="result">
+            <article class="profile-card">
+                <div class="avatar-frame"><img id="avatar" alt=""></div>
+                <div class="seed-number" id="seed-number"></div>
+                <div class="username" id="username"></div>
+                <div class="user-id"><span>PLAYER ID</span><strong id="user-id"></strong></div>
+                <div class="summary-row">
+                    <div class="summary-pill score-summary"><span>AVERAGE SCORE</span><strong id="average-score"></strong></div>
+                    <div class="summary-pill max-summary"><span>%MAX SUM</span><strong id="percent-max"></strong></div>
+                </div>
+            </article>
+            <div class="mod-grid" id="mod-grid"></div>
+        </section>
+        <section class="stinger" id="stinger" aria-hidden="true">
+            <div class="blinds" aria-hidden="true">
+                <i style="--i:0;--r:11"></i><i style="--i:1;--r:10"></i><i style="--i:2;--r:9"></i><i style="--i:3;--r:8"></i>
+                <i style="--i:4;--r:7"></i><i style="--i:5;--r:6"></i><i style="--i:6;--r:5"></i><i style="--i:7;--r:4"></i>
+                <i style="--i:8;--r:3"></i><i style="--i:9;--r:2"></i><i style="--i:10;--r:1"></i><i style="--i:11;--r:0"></i>
+            </div>
+            <div class="stinger-seed"><small>QUALIFIER SEED</small><strong id="stinger-seed"></strong></div>
+            <div class="stinger-player">
+                <div class="stinger-avatar"><img id="stinger-avatar" alt=""></div>
+                <div id="stinger-name"></div>
+            </div>
+        </section>
+    </main>
+    <script src="../deps/countUp.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
