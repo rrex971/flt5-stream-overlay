@@ -1,0 +1,147 @@
+{
+    "qualifiers": {
+        "round": "QUALIFIERS",
+        "slots": ["NM1", "NM2", "NM3", "HD1", "HD2", "HR1", "HR2", "DT1", "DT2"],
+        "maps": {
+            "2294918": {
+                "slot": "NM1",
+                "beatmapsetId": 1097911,
+                "link": "https://osu.ppy.sh/beatmapsets/1097911#fruits/2294918",
+                "name": "Sasaki Sayaka - Atlantico Blue [Dapu's Rain]",
+                "length": "03:52",
+                "drainLength": "03:50",
+                "bpm": 177,
+                "cs": 4,
+                "hp": 6,
+                "od": 9,
+                "ar": 9
+            },
+            "3024976": {
+                "slot": "NM2",
+                "beatmapsetId": 1460413,
+                "link": "https://osu.ppy.sh/beatmapsets/1460413#fruits/3024976",
+                "name": "Silentroom vs. Frums - Aegleseeker [Rain]",
+                "length": "02:26",
+                "drainLength": "02:16",
+                "bpm": 234,
+                "cs": 3.8,
+                "hp": 5,
+                "od": 9.2,
+                "ar": 9.2
+            },
+            "5883283": {
+                "slot": "NM3",
+                "beatmapsetId": 2621152,
+                "link": "https://osu.ppy.sh/beatmapsets/2621152#fruits/5883283",
+                "name": "Various Artists - FLT5 Qualifiers Edits Pack [NM3 - Popular [Expert]]",
+                "length": "02:58",
+                "drainLength": "02:35",
+                "bpm": 250,
+                "cs": 4,
+                "hp": 4,
+                "od": 8.6,
+                "ar": 9
+            },
+            "2159369": {
+                "slot": "HD1",
+                "beatmapsetId": 1032794,
+                "link": "https://osu.ppy.sh/beatmapsets/1032794#fruits/2159369",
+                "name": "BAND-MAID - Choose me [Liyuu's Rain]",
+                "length": "03:36",
+                "drainLength": "03:30",
+                "bpm": 180,
+                "cs": 3.8,
+                "hp": 6,
+                "od": 9.1,
+                "ar": 9.1
+            },
+            "5883271": {
+                "slot": "HD2",
+                "beatmapsetId": 2621143,
+                "link": "https://osu.ppy.sh/beatmapsets/2621143#fruits/5883271",
+                "name": "hololive English - Last Christmas (Cover) [Southern Winter]",
+                "length": "02:23",
+                "drainLength": "02:23",
+                "bpm": 106.85,
+                "cs": 4,
+                "hp": 4,
+                "od": 8.5,
+                "ar": 8.2
+            },
+            "5284712": {
+                "slot": "HR1",
+                "beatmapsetId": 2377706,
+                "link": "https://osu.ppy.sh/beatmapsets/2377706#fruits/5284712",
+                "name": "DECO*27 - Telepathy feat. Hatsune Miku [Rew's Platter]",
+                "length": "02:15",
+                "drainLength": "02:11",
+                "bpm": 205,
+                "cs": 4.55,
+                "hp": 5.2,
+                "od": 10,
+                "ar": 10
+            },
+            "5883282": {
+                "slot": "HR2",
+                "beatmapsetId": 2621152,
+                "link": "https://osu.ppy.sh/beatmapsets/2621152#fruits/5883282",
+                "name": "Various Artists - FLT5 Qualifiers Edits Pack [HR2 - Villain Virus [Rain]]",
+                "length": "02:34",
+                "drainLength": "02:32",
+                "bpm": 260,
+                "cs": 4.94,
+                "hp": 5.2,
+                "od": 9.8,
+                "ar": 9.8
+            },
+            "2595982": {
+                "slot": "DT1",
+                "beatmapsetId": 1249031,
+                "link": "https://osu.ppy.sh/beatmapsets/1249031#fruits/2595982",
+                "name": "halca - Kokuhaku Bungee Jump [Platter]",
+                "length": "02:44",
+                "drainLength": "02:32",
+                "bpm": 277.5,
+                "cs": 3.5,
+                "hp": 4,
+                "od": 9.95,
+                "ar": 9.87
+            },
+            "5107075": {
+                "slot": "DT2",
+                "beatmapsetId": 2329461,
+                "link": "https://osu.ppy.sh/beatmapsets/2329461#fruits/5107075",
+                "name": "Don Omar feat. Lucenzo - Danza Kuduro [Platter]",
+                "length": "02:09",
+                "drainLength": "02:08",
+                "bpm": 195,
+                "cs": 3.5,
+                "hp": 3,
+                "od": 9.75,
+                "ar": 9.67
+            }
+        },
+        "custom": {}
+    },
+    "finals": {
+        "round": "FINALS",
+        "slots": ["NM1", "NM2", "NM3", "NM4", "HD1", "HD2", "HD3", "HR1", "HR2", "HR3", "DT1", "DT2", "DT3", "TB"],
+        "maps": {
+            "4600548": {"slot": "NM1", "artist": "kessoku band", "title": "Ano Band", "difficulty": "Rain", "sr": 4.24, "bpm": 190, "length": "03:09", "cs": 3.9, "ar": 9, "od": 9, "hp": 5, "mapper": "Yoshi_green", "replayer": "Nelys"},
+            "4369020": {"slot": "NM2", "artist": "MisoilePunch -Forever-", "title": "Bloomin'", "difficulty": "Kukkai's EXHAUST", "sr": 4.06, "bpm": 234, "length": "02:13", "cs": 4, "ar": 9.2, "od": 9.2, "hp": 5, "mapper": "Stardust Prism", "replayer": "Nelys"},
+            "4508117": {"slot": "NM3", "artist": "REOL", "title": "Konoyo Loading...", "difficulty": "Ken & AFB's Virtual Reality", "sr": 3.86, "bpm": 128, "length": "03:17", "cs": 4.5, "ar": 8.5, "od": 8.5, "hp": 5.5, "mapper": "autofanboy", "replayer": "Nelys"},
+            "2238398": {"slot": "NM4", "artist": "BUTAOTOME", "title": "Towa no Maigo", "difficulty": "It was all a dream", "sr": 6.39, "bpm": 180, "length": "02:28", "cs": 4.2, "ar": 8.2, "od": 8.5, "hp": 5, "mapper": "Icekalt", "replayer": "Nelys"},
+            "4459347": {"slot": "HD1", "artist": "TAMAONSEN", "title": "Saigetsu (Midnight Moon Walker Remix)", "difficulty": "Bober's Rain", "sr": 3.71, "bpm": 176, "length": "03:35", "cs": 3.8, "ar": 9, "od": 9, "hp": 5, "mapper": "Spectator", "replayer": "Nelys"},
+            "5780135": {"slot": "HD2", "artist": "Otonose Kanade", "title": "You and aIzu", "difficulty": "Nene's Platter", "sr": 3.03, "bpm": 180, "length": "02:29", "cs": 3.3, "ar": 8, "od": 8, "hp": 3, "mapper": "Remuring", "replayer": "Nelys"},
+            "5708533": {"slot": "HD3", "artist": "EmoCosine", "title": "MAGENTA POTION (Short Ver.)", "difficulty": "HD II", "sr": 4.15, "bpm": 150, "length": "02:18", "cs": 4, "ar": 8.3, "od": 8.3, "hp": 5, "mapper": "Des9", "replayer": "Nelys"},
+            "5418241": {"slot": "HR1", "artist": "Omoi", "title": "Teo", "difficulty": "Misti's Platter", "sr": 4.05, "bpm": 185, "length": "03:19", "cs": 4.7, "ar": 10, "od": 10, "hp": 5.6, "mapper": "Verti", "replayer": "Nelys"},
+            "1734023": {"slot": "HR2", "artist": "Gekidan Record", "title": "Ares no Tate", "difficulty": "Platter", "sr": 4.01, "bpm": 174, "length": "01:38", "cs": 4.6, "ar": 10, "od": 10, "hp": 7, "mapper": "- Syamu -", "replayer": "Nelys"},
+            "5420860": {"slot": "HR3", "artist": "inoqx", "title": "WISH", "difficulty": "platter", "sr": 4.04, "bpm": 227, "length": "01:56", "cs": 4.6, "ar": 10, "od": 10, "hp": 5.6, "mapper": "Juansy-", "replayer": "Nelys"},
+            "3976805": {"slot": "DT1", "artist": "hololive IDOL PROJECT", "title": "Hyakka Ryouran Hanafubuki", "difficulty": "Platter", "sr": 3.99, "bpm": 263, "length": "02:16", "cs": 3.7, "ar": 9.7, "od": 9.8, "hp": 4, "mapper": "Secre", "replayer": "Nelys"},
+            "4803922": {"slot": "DT2", "artist": "SICK HACK", "title": "Watashi dake Yuurei", "difficulty": "Shameimaru's Salad", "sr": 3.61, "bpm": 266, "length": "02:08", "cs": 3.2, "ar": 9, "od": 9.1, "hp": 3.5, "mapper": "wangwangg", "replayer": "Nelys"},
+            "3435221": {"slot": "DT3", "artist": "BlackY", "title": "ULT!MATE END", "difficulty": "Hyperion's Platter", "sr": 3.97, "bpm": 450, "length": "02:40", "cs": 3, "ar": 9.8, "od": 9.9, "hp": 3, "mapper": "Deif", "replayer": "Nelys"},
+            "5177765": {"slot": "TB", "artist": "Symholic feat. Rina Komatsu", "title": "Veil of Ash", "difficulty": "Rain", "sr": 4.59, "bpm": 210, "length": "05:14", "cs": 3.9, "ar": 9.1, "od": 9.1, "hp": 5, "mapper": "Yoshi_green", "replayer": "Nelys"}
+        },
+        "custom": {}
+    }
+}
