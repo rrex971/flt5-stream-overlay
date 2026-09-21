@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FLT5 Pool Showcase</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main id="overlay">
+        <svg class="background-art" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+                <mask id="gameplay-cutout" maskUnits="userSpaceOnUse">
+                    <rect width="1920" height="1080" fill="white"></rect>
+                    <rect x="28" y="144" width="1408" height="792" rx="24" fill="black"></rect>
+                </mask>
+            </defs>
+            <image href="../assets/showcase-background.png" width="1920" height="1080" preserveAspectRatio="none" mask="url(#gameplay-cutout)"></image>
+            <rect class="gameplay-shadow" x="28" y="148" width="1408" height="792" rx="24"></rect>
+            <rect class="gameplay-outline" x="28" y="148" width="1408" height="792" rx="24"></rect>
+        </svg>
+        <header class="brand-row">
+            <div class="logo-crop"><img src="../assets/flt5-logo.png" alt="FLT5"></div>
+            <h1 class="sticker-title"><span>POOL</span><span>SHOWCASE</span></h1>
+            <div class="top-loops" aria-hidden="true">
+                <img src="../assets/loops/blue.png" alt="">
+                <img src="../assets/loops/pink.png" alt="">
+                <img src="../assets/loops/yellow.png" alt="">
+                <img src="../assets/loops/purple.png" alt="">
+                <img src="../assets/loops/orange.png" alt="">
+            </div>
+            <div class="round-sticker"><span id="round"></span></div>
+        </header>
+        <section class="gameplay-target" aria-label="Gameplay client area"></section>
+        <aside class="info-card" id="info-card">
+            <div class="slot-sticker" id="slot-sticker"><span id="slot"></span></div>
+            <div class="cover" id="cover">
+                <div class="cover-image"></div>
+                <div class="cover-image"></div>
+            </div>
+            <section class="map-copy">
+                <div class="artist" id="artist"></div>
+                <div class="title-window"><div class="title" id="title"></div></div>
+                <div class="difficulty" id="difficulty"></div>
+                <div class="credits">
+                    <div class="credit"><span>Mapped by</span><strong id="mapper"></strong></div>
+                    <div class="credit"><span>Replay by</span><strong id="replayer">—</strong></div>
+                </div>
+            </section>
+            <section class="stat-grid">
+                <div class="stat-pill star-pill"><span>STAR RATING</span><strong><span id="sr"></span><small>★</small></strong></div>
+                <div class="stat-pill tone-blue"><span>CS</span><strong id="cs"></strong></div>
+                <div class="stat-pill tone-pink"><span>AR</span><strong id="ar"></strong></div>
+                <div class="stat-pill tone-purple"><span>OD</span><strong id="od"></strong></div>
+                <div class="stat-pill tone-peach"><span>HP</span><strong id="hp"></strong></div>
+                <div class="stat-pill wide-pill tempo-pill"><span>TEMPO</span><strong><span id="bpm"></span> BPM</strong></div>
+                <div class="stat-pill wide-pill length-pill"><span>MAP LENGTH</span><strong id="length"></strong></div>
+            </section>
+        </aside>
+        <nav class="pool-nav" id="pool-nav" aria-label="Mappool slots"></nav>
+    </main>
+    <script src="../deps/reconnecting-websocket.min.js"></script>
+    <script src="../deps/countUp.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
