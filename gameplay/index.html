@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FLT5 Gameplay</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main id="overlay">
+        <svg class="background-art" viewBox="0 0 1920 1080" aria-hidden="true">
+            <defs>
+                <mask id="client-mask">
+                    <rect width="1920" height="1080" fill="white"></rect>
+                    <g id="client-cutouts"></g>
+                </mask>
+            </defs>
+            <foreignObject width="1920" height="1080" mask="url(#client-mask)">
+                <video xmlns="http://www.w3.org/1999/xhtml" src="../assets/background.webm" width="1920" height="1080" autoplay loop muted playsinline></video>
+            </foreignObject>
+        </svg>
+
+        <section class="client-slots" aria-label="Tournament clients">
+            <div class="client-slot empty" data-client="0"><span></span></div>
+            <div class="client-slot empty" data-client="1"><span></span></div>
+            <div class="client-slot empty" data-client="2"><span></span></div>
+            <div class="client-slot empty" data-client="3"><span></span></div>
+            <div class="client-slot empty" data-client="4"><span></span></div>
+            <div class="client-slot empty" data-client="5"><span></span></div>
+            <div class="client-slot empty" data-client="6"><span></span></div>
+            <div class="client-slot empty" data-client="7"><span></span></div>
+            <div class="client-slot empty" data-client="8"><span></span></div>
+            <div class="client-slot empty" data-client="9"><span></span></div>
+        </section>
+
+        <header class="brand-row">
+            <div class="logo-crop"><img src="../assets/flt5-logo.png" alt="FLT5"></div>
+            <h1 class="sticker-title"><span>BATTLE</span><span>ROYALE</span></h1>
+            <div class="top-loops" aria-hidden="true">
+                <img src="../assets/loops/blue.png" alt="">
+                <img src="../assets/loops/pink.png" alt="">
+                <img src="../assets/loops/yellow.png" alt="">
+                <img src="../assets/loops/purple.png" alt="">
+                <img src="../assets/loops/orange.png" alt="">
+            </div>
+            <div class="round-sticker"><span id="round-name">FINALS</span></div>
+        </header>
+
+        <aside class="leaderboard-panel">
+            <div class="leaderboard" id="leaderboard"></div>
+            <div class="casters-card">
+                <div class="panel-sticker casters-label">CASTERS</div>
+            </div>
+        </aside>
+
+        <section class="lower-panels">
+            <article class="info-panel map-panel">
+                <div class="panel-sticker map-sticker" id="map-slot">MAP</div>
+                <div class="map-cover">
+                    <div class="cover-layer current" id="cover-current"></div>
+                </div>
+                <div class="map-copy">
+                    <div class="map-artist" id="map-artist">—</div>
+                    <div class="map-title" id="map-title">—</div>
+                    <div class="map-difficulty" id="map-difficulty">—</div>
+                    <div class="map-meta">
+                        <span>MAPPED BY</span>
+                        <strong id="map-mapper">—</strong>
+                    </div>
+                </div>
+                <div class="map-stats">
+                    <div><span>STAR</span><strong><span id="map-sr">—</span><small>★</small></strong></div>
+                    <div><span>TEMPO</span><strong id="map-bpm">—</strong></div>
+                    <div><span>CS</span><strong id="map-cs">—</strong></div>
+                    <div><span>AR</span><strong id="map-ar">—</strong></div>
+                    <div><span>OD</span><strong id="map-od">—</strong></div>
+                    <div><span>LENGTH</span><strong id="map-length">—</strong></div>
+                </div>
+            </article>
+
+            <article class="info-panel chat-panel ingame-panel">
+                <div class="panel-sticker chat-sticker">IN-GAME CHAT</div>
+                <div class="chat-feed"><div class="chat-messages" id="ingame-chat"></div></div>
+                <div class="chat-empty" id="ingame-empty">—</div>
+            </article>
+
+            <article class="info-panel chat-panel twitch-panel">
+                <div class="panel-sticker chat-sticker twitch-sticker"><span>TWITCH CHAT</span></div>
+                <div class="chat-feed"><div class="chat-messages" id="twitch-chat"></div></div>
+                <div class="chat-empty" id="twitch-empty">—</div>
+            </article>
+        </section>
+    </main>
+    <script src="../deps/reconnecting-websocket.min.js"></script>
+    <script src="../deps/countUp.js"></script>
+    <script src="../deps/twitch-chat.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>

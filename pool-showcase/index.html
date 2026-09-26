@@ -15,7 +15,9 @@
                     <rect x="28" y="144" width="1408" height="792" rx="24" fill="black"></rect>
                 </mask>
             </defs>
-            <image href="../assets/showcase-background.png" width="1920" height="1080" preserveAspectRatio="none" mask="url(#gameplay-cutout)"></image>
+            <foreignObject width="1920" height="1080" mask="url(#gameplay-cutout)">
+                <video xmlns="http://www.w3.org/1999/xhtml" src="../assets/background.webm" width="1920" height="1080" autoplay loop muted playsinline></video>
+            </foreignObject>
             <rect class="gameplay-shadow" x="28" y="148" width="1408" height="792" rx="24"></rect>
             <rect class="gameplay-outline" x="28" y="148" width="1408" height="792" rx="24"></rect>
         </svg>

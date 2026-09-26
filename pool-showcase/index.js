@@ -1,10 +1,10 @@
 const socketUrl = `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/websocket/v2`;
 const slotColors = {
-    NM: '#ffd46f',
-    HD: '#b8a0ff',
+    NM: '#8dd7ff',
+    HD: '#ffd46f',
     HR: '#ffb68f',
-    DT: '#8dd7ff',
-    TB: '#b59aff'
+    DT: '#b8a0ff',
+    TB: '#f598c9'
 };
 
 const ui = {

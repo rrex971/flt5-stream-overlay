@@ -12,6 +12,7 @@
 
 :root {
     --pink: #ed70ae;
+    --pink-depth: #de629f;
     --pink-soft: #f598c9;
     --pink-light: #ffc2e2;
     --purple: #8053ce;
@@ -66,7 +67,7 @@ body {
 }
 
 .gameplay-shadow {
-    stroke: var(--purple);
+    stroke: var(--pink-depth);
     stroke-width: 15px;
     opacity: .72;
 }
@@ -91,7 +92,7 @@ body {
     height: 126px;
     overflow: hidden;
     transform: rotate(-2deg);
-    filter: drop-shadow(0 6px 0 rgba(91, 50, 158, .18));
+    filter: drop-shadow(0 6px 0 rgba(222, 98, 159, .18));
 }
 
 .logo-crop img {
@@ -117,7 +118,7 @@ body {
     letter-spacing: 1px;
     -webkit-text-stroke: 11px var(--white);
     paint-order: stroke fill;
-    filter: drop-shadow(0 8px 0 var(--purple));
+    filter: drop-shadow(0 8px 0 var(--pink-depth));
 }
 
 .sticker-title span {
@@ -148,7 +149,7 @@ body {
     -webkit-text-stroke: 2px var(--purple-dark);
     paint-order: stroke fill;
     text-shadow: 0 4px 0 var(--yellow);
-    box-shadow: 0 7px 0 rgba(91, 50, 158, .22);
+    box-shadow: 0 7px 0 rgba(222, 98, 159, .22);
     transform: rotate(-3deg);
 }
 
@@ -217,7 +218,7 @@ body {
     border: 8px solid var(--white);
     border-radius: 29px 21px 31px 23px;
     background: rgba(255, 250, 252, .97);
-    box-shadow: 0 8px 0 var(--purple), 0 14px 0 rgba(255, 255, 255, .58);
+    box-shadow: 0 8px 0 var(--pink-depth), 0 14px 0 rgba(255, 255, 255, .58);
     animation: none;
     transition: none;
     z-index: 6;
@@ -249,7 +250,7 @@ body {
     letter-spacing: 1px;
     -webkit-text-stroke: 4px var(--purple-dark);
     paint-order: stroke fill;
-    box-shadow: 0 8px 0 var(--purple);
+    box-shadow: 0 8px 0 var(--pink-depth);
     transform: rotate(-2deg);
     transition: background-color .3s ease, transform .38s cubic-bezier(.2, .9, .3, 1.25);
 }
@@ -542,7 +543,7 @@ body {
     border: 7px solid var(--white);
     border-radius: 28px;
     background: var(--white);
-    box-shadow: 0 7px 0 rgba(128, 83, 206, .5);
+    box-shadow: 0 7px 0 rgba(222, 98, 159, .5);
 }
 
 .slot-chip {
@@ -560,7 +561,7 @@ body {
     line-height: 1;
     -webkit-text-stroke: 1.6px var(--purple-dark);
     paint-order: stroke fill;
-    box-shadow: 0 4px 0 rgba(128, 83, 206, .25);
+    box-shadow: 0 4px 0 rgba(222, 98, 159, .25);
     transform: rotate(var(--tilt));
     opacity: .7;
     transition: transform .4s cubic-bezier(.2, .9, .3, 1.35), opacity .3s ease, box-shadow .4s ease, filter .3s ease;
@@ -571,7 +572,7 @@ body {
     opacity: 1;
     filter: saturate(1.12);
     transform: translateY(-7px) rotate(var(--tilt)) scale(1.12);
-    box-shadow: 0 7px 0 var(--purple), 0 0 0 5px var(--white);
+    box-shadow: 0 7px 0 var(--pink-depth), 0 0 0 5px var(--white);
 }
 
 @media (prefers-reduced-motion: reduce) {
