@@ -1,0 +1,6 @@
+{
+    "channel": "raybean_osu",
+    "starting": {"minutes": 5, "label": "STARTING IN", "finished": "ANY MOMENT NOW"},
+    "ending": {"minutes": 0, "label": "ENDING IN", "finished": "SEE YOU NEXT TIME"},
+    "technical": {"minutes": 0, "label": "BACK IN", "finished": "BACK SHORTLY"}
+}

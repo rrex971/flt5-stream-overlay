@@ -14,10 +14,10 @@ const ui = {
 };
 
 const modMeta = {
-    NM: { color: '#ffd46f', tilt: '-1.5deg' },
-    HD: { color: '#b8a0ff', tilt: '1.2deg' },
-    HR: { color: '#f598c9', tilt: '-1deg' },
-    DT: { color: '#8dd7ff', tilt: '1.4deg' }
+    NM: { color: '#8dd7ff', tilt: '-1.5deg' },
+    HD: { color: '#ffd46f', tilt: '1.2deg' },
+    HR: { color: '#ffb68f', tilt: '-1deg' },
+    DT: { color: '#b8a0ff', tilt: '1.4deg' }
 };
 
 let players = [];
