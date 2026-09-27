@@ -181,6 +181,12 @@ body {
     gap: 30px 28px;
 }
 
+.match-grid.eight-up {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 26px 22px;
+}
+
 .match-card {
     position: relative;
     min-width: 0;
@@ -243,7 +249,7 @@ body {
 .match-time span {
     display: block;
     color: var(--pink);
-    font-family: Momo, cursive;
+    font-family: Arco, sans-serif;
     font-size: 18px;
     line-height: 1.3;
 }
@@ -291,7 +297,7 @@ body {
     border-radius: 13px 9px 14px 10px;
     background: color-mix(in srgb, var(--accent), white 75%);
     color: var(--purple-dark);
-    font-family: Momo, cursive;
+    font-family: Arco, sans-serif;
     font-size: 20px;
     line-height: 1;
     text-overflow: ellipsis;
@@ -324,11 +330,71 @@ body {
 .match-footer strong {
     min-width: 0;
     overflow: hidden;
-    font-family: Momo, cursive;
+    font-family: Arco, sans-serif;
     font-size: 19px;
     font-weight: 400;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.match-grid.eight-up .match-card {
+    padding: 78px 17px 52px;
+    border-width: 7px;
+}
+
+.match-grid.eight-up .lobby-sticker {
+    top: 16px;
+    left: 16px;
+    min-width: 148px;
+    padding: 11px 16px 8px;
+    font-size: 29px;
+}
+
+.match-grid.eight-up .match-time {
+    top: 20px;
+    right: 17px;
+}
+
+.match-grid.eight-up .match-time span {
+    font-family: Arco, sans-serif;
+    font-size: 14px;
+}
+
+.match-grid.eight-up .match-time strong {
+    margin-top: 4px;
+    font-size: 21px;
+}
+
+.match-grid.eight-up .player-list {
+    gap: 8px 9px;
+}
+
+.match-grid.eight-up .player {
+    padding: 9px 9px 7px;
+    font-size: 17px;
+}
+
+.match-grid.eight-up .match-footer {
+    right: 210px;
+    bottom: 17px;
+    left: 18px;
+    gap: 8px;
+}
+
+.match-grid.eight-up .match-footer span {
+    font-size: 12px;
+}
+
+.match-grid.eight-up .match-footer strong {
+    font-size: 15px;
+}
+
+.match-grid.eight-up .relative-time {
+    right: 17px;
+    bottom: 13px;
+    min-width: 180px;
+    padding: 8px 10px 7px;
+    font-size: 14px;
 }
 
 .empty-state {

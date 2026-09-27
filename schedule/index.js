@@ -136,6 +136,7 @@ const render = stage => {
     ui.stage.textContent = stage?.name?.toUpperCase() || requestedStage().name.toUpperCase();
     if (nextSignature === signature) return;
     signature = nextSignature;
+    ui.grid.classList.toggle('eight-up', matches.length > 6);
     ui.grid.replaceChildren(...matches.map(createMatchCard));
     ui.empty.classList.toggle('visible', !matches.length);
     updateRelativeTimes();

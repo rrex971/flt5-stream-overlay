@@ -282,32 +282,29 @@ function renderLeaderboard(nextPlayers) {
     updateClientHighlights()
 }
 
-function handleRound(playersNow, beatmapId, pointTotal, roundStarted, roundEnded) {
+function handleRound(playersNow, beatmapId, pointTotal, playing) {
     const snapshot = playersNow.map(player => ({...player}))
-    if (roundStarted) {
-        roundState = {beatmapId, pointTotal, active: true, resolved: false, snapshot}
-        return
-    }
     if (!roundState) {
-        roundState = {beatmapId, pointTotal, active: snapshot.some(player => player.score > 0), resolved: false, snapshot}
+        roundState = {beatmapId, pointTotal, active: playing && snapshot.some(player => player.score > 0), resolved: false, snapshot}
         return
     }
-    if (!roundState.resolved && !roundEnded && snapshot.some(player => player.score > 0)) {
+    const pointChanged = Number.isFinite(pointTotal) && Number.isFinite(roundState.pointTotal) && pointTotal !== roundState.pointTotal
+    if (pointChanged) {
+        if (roundState.active && !roundState.resolved) resolveLastPlace(roundState)
+        roundState = {beatmapId, pointTotal, active: false, resolved: false, snapshot}
+        return
+    }
+    const beatmapChanged = beatmapId && roundState.beatmapId && beatmapId !== roundState.beatmapId
+    if (beatmapChanged) {
+        roundState = {beatmapId, pointTotal, active: playing && snapshot.some(player => player.score > 0), resolved: false, snapshot}
+        return
+    }
+    if (playing && snapshot.some(player => player.score > 0)) {
         roundState.active = true
         roundState.snapshot = snapshot
     }
-    const beatmapChanged = beatmapId && roundState.beatmapId && beatmapId !== roundState.beatmapId
-    const pointChanged = Number.isFinite(pointTotal) && Number.isFinite(roundState.pointTotal) && pointTotal !== roundState.pointTotal
-    if ((roundEnded || beatmapChanged || pointChanged) && roundState.active && !roundState.resolved) {
-        resolveLastPlace(roundState)
-        roundState.active = false
-        roundState.resolved = true
-    }
-    if (beatmapChanged) roundState = {beatmapId, pointTotal, active: snapshot.some(player => player.score > 0), resolved: false, snapshot}
-    else {
-        roundState.beatmapId = beatmapId || roundState.beatmapId
-        roundState.pointTotal = Number.isFinite(pointTotal) ? pointTotal : roundState.pointTotal
-    }
+    roundState.beatmapId = beatmapId || roundState.beatmapId
+    roundState.pointTotal = Number.isFinite(pointTotal) ? pointTotal : roundState.pointTotal
 }
 
 function resolveLastPlace(state) {
@@ -479,14 +476,11 @@ function updateFromTosu(data) {
     const beatmapId = Number(beatmap.id || beatmap.mapid || 0)
     const points = data.tourney?.points || {}
     const pointTotal = Number(points.left || 0) + Number(points.right || 0)
-    const wasGameplayActive = gameplayActive
     const nextGameplayActive = isGameplayOngoing(data)
-    const roundStarted = !wasGameplayActive && nextGameplayActive
-    const roundEnded = wasGameplayActive && !nextGameplayActive
     setGameplayActive(nextGameplayActive)
     renderLeaderboard(nextPlayers)
     renderClientSlots(clients)
-    handleRound(nextPlayers, beatmapId, pointTotal, roundStarted, roundEnded)
+    handleRound(nextPlayers, beatmapId, pointTotal, nextGameplayActive)
     updateMap(data)
     renderIngameChat(data.tourney?.chat || data.tourney?.manager?.chat || [])
 }
