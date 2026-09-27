@@ -10,7 +10,7 @@
     <main id="overlay">
         <svg class="background-art" viewBox="0 0 1920 1080" aria-hidden="true">
             <defs>
-                <mask id="client-mask">
+                <mask id="client-mask" mask-type="luminance">
                     <rect width="1920" height="1080" fill="white"></rect>
                     <g id="client-cutouts"></g>
                 </mask>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="map-copy">
                     <div class="map-artist" id="map-artist">—</div>
-                    <div class="map-title" id="map-title">—</div>
+                    <div class="map-title" id="map-title"><div class="map-title-track"><span>—</span><span aria-hidden="true">—</span></div></div>
                     <div class="map-difficulty" id="map-difficulty">—</div>
                     <div class="map-meta">
                         <span>MAPPED BY</span>

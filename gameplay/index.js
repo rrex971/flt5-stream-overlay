@@ -14,6 +14,8 @@ const twitchEmpty = document.getElementById('twitch-empty')
 const mapSlot = document.getElementById('map-slot')
 const mapArtist = document.getElementById('map-artist')
 const mapTitle = document.getElementById('map-title')
+const mapTitleTrack = mapTitle.querySelector('.map-title-track')
+const mapTitleCopies = [...mapTitleTrack.querySelectorAll('span')]
 const mapDifficulty = document.getElementById('map-difficulty')
 const mapMapper = document.getElementById('map-mapper')
 const coverCurrent = document.getElementById('cover-current')
@@ -51,7 +53,12 @@ function fitOverlay() {
 
 function syncClientCutouts() {
     const cutouts = document.getElementById('client-cutouts')
-    cutouts.replaceChildren(...clientSlots.filter(slot => getComputedStyle(slot).display !== 'none').map(slot => {
+    const visibleSlots = clientSlots.filter(slot => getComputedStyle(slot).display !== 'none')
+    const activeKeys = new Set(visibleSlots.map(slot => slot.dataset.client))
+    cutouts.querySelectorAll('.client-cutout').forEach(path => {
+        if (!activeKeys.has(path.dataset.client)) path.remove()
+    })
+    visibleSlots.forEach(slot => {
         const style = getComputedStyle(slot)
         const x = slot.offsetLeft
         const y = slot.offsetTop
@@ -62,11 +69,18 @@ function syncClientCutouts() {
         const br = parseFloat(style.borderBottomRightRadius)
         const bl = parseFloat(style.borderBottomLeftRadius)
         syncClientStatus(slot, style)
-        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+        let path = cutouts.querySelector(`[data-client="${CSS.escape(slot.dataset.client)}"]`)
+        if (!path) {
+            path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+            path.classList.add('client-cutout')
+            path.dataset.client = slot.dataset.client
+            path.setAttribute('fill', 'black')
+            cutouts.append(path)
+        }
         path.setAttribute('fill', 'black')
         path.setAttribute('d', `M${x + tl} ${y}H${x + width - tr}A${tr} ${tr} 0 0 1 ${x + width} ${y + tr}V${y + height - br}A${br} ${br} 0 0 1 ${x + width - br} ${y + height}H${x + bl}A${bl} ${bl} 0 0 1 ${x} ${y + height - bl}V${y + tl}A${tl} ${tl} 0 0 1 ${x + tl} ${y}Z`)
-        return path
-    }))
+        path.style.opacity = slot.classList.contains('empty') ? '0' : '1'
+    })
 }
 
 function syncClientStatus(slot, style = getComputedStyle(slot)) {
@@ -147,6 +161,8 @@ function playerFromClient(client, index) {
         id: Number(user.id || client.spectating?.userID || 0),
         name: user.name || play.playerName || play.name || '',
         score: Number(play.score || 0),
+        accuracy: Number(play.accuracy ?? play.acc ?? 0),
+        misses: Number(play.hits?.['0'] ?? play.hits?.miss ?? play.hits?.misses ?? 0),
         mods: Array.isArray(mods) ? mods.join('') : String(mods || '')
     }
 }
@@ -160,6 +176,15 @@ function renderClientSlots(clients) {
         const label = slot.querySelector('span')
         label.textContent = name
         label.dataset.name = name
+        let misses = slot.querySelector('.client-misses')
+        if (!misses) {
+            misses = document.createElement('div')
+            misses.className = 'client-misses'
+            slot.append(misses)
+        }
+        const missCount = player?.misses || 0
+        misses.textContent = `${missCount}x`
+        misses.classList.toggle('visible', Boolean(name && missCount > 0))
         if (!slot.querySelector('.client-status')) {
             const status = document.createElement('div')
             status.className = 'client-status'
@@ -169,6 +194,7 @@ function renderClientSlots(clients) {
             syncClientStatus(slot)
         }
     })
+    syncClientCutouts()
     updateClientHighlights()
 }
 
@@ -210,11 +236,58 @@ function createPlayerRow(player) {
     const row = document.createElement('div')
     row.className = 'player-row'
     row.dataset.key = key
-    row.innerHTML = `<img class="avatar" alt=""><div class="player-copy"><div class="player-name"></div><div class="player-bottom"><div class="player-score"></div><div class="hearts"></div></div></div>`
+    row.innerHTML = `<img class="avatar" alt=""><div class="player-copy"><div class="player-head"><div class="player-name"></div><div class="player-accuracy"></div></div><div class="player-bottom"><div class="player-score"></div><div class="hearts"></div></div></div>`
     row.querySelector('.avatar').addEventListener('error', event => {
         event.currentTarget.style.opacity = '.24'
     })
     return row
+}
+
+function renderScoreGaps(sorted, rowHeight, rowGap) {
+    const count = Math.max(0, sorted.length - 1)
+    leaderboard.querySelectorAll('.score-gap').forEach((gap, index) => {
+        if (index >= count) gap.remove()
+    })
+    for (let index = 0; index < count; index += 1) {
+        let gap = leaderboard.querySelector(`.score-gap[data-gap="${index}"]`)
+        if (!gap) {
+            gap = document.createElement('div')
+            gap.className = 'score-gap'
+            gap.dataset.gap = String(index)
+            gap.innerHTML = '<span>▲</span><strong></strong>'
+            leaderboard.append(gap)
+        }
+        const value = Math.abs(scoreValue(sorted[index]) - scoreValue(sorted[index + 1]))
+        gap.style.setProperty('--gap-y', `${(index + 1) * (rowHeight + rowGap) - rowGap / 2}px`)
+        const valueNode = gap.querySelector('strong')
+        if (!gap.counter) {
+            gap.counter = new CountUp(valueNode, 0, value, 0, .2, {useEasing: true, useGrouping: true, separator: ','})
+            gap.counter.start()
+        } else {
+            gap.counter.update(value)
+        }
+    }
+}
+
+function renderHearts(row, player, lifeState) {
+    const hearts = row.querySelector('.hearts')
+    while (hearts.children.length < lifeState.length) {
+        const heart = document.createElement('button')
+        const heartIndex = hearts.children.length
+        heart.type = 'button'
+        heart.className = 'heart'
+        heart.textContent = '❤'
+        heart.addEventListener('click', () => {
+            const current = players.get(row.dataset.key)
+            if (current) toggleHeart(current, heartIndex)
+        })
+        hearts.append(heart)
+    }
+    while (hearts.children.length > lifeState.length) hearts.lastElementChild.remove()
+    ;[...hearts.children].forEach((heart, heartIndex) => {
+        heart.classList.toggle('off', !lifeState[heartIndex])
+        heart.setAttribute('aria-label', `${player.name} life ${heartIndex + 1}`)
+    })
 }
 
 function renderLeaderboard(nextPlayers) {
@@ -260,6 +333,7 @@ function renderLeaderboard(nextPlayers) {
             avatar.style.opacity = ''
         }
         row.querySelector('.player-name').textContent = player.name
+        row.querySelector('.player-accuracy').textContent = `${Math.max(0, Math.min(100, Number(player.accuracy) || 0)).toFixed(2)}%`
         const score = scoreValue(player)
         const scoreNode = row.querySelector('.player-score')
         if (!row.scoreCounter) {
@@ -268,17 +342,9 @@ function renderLeaderboard(nextPlayers) {
         } else {
             row.scoreCounter.update(score)
         }
-        const hearts = row.querySelector('.hearts')
-        hearts.replaceChildren(...lifeState.map((enabled, heartIndex) => {
-            const heart = document.createElement('button')
-            heart.type = 'button'
-            heart.className = `heart${enabled ? '' : ' off'}`
-            heart.textContent = '❤'
-            heart.setAttribute('aria-label', `${player.name} life ${heartIndex + 1}`)
-            heart.addEventListener('click', () => toggleHeart(player, heartIndex))
-            return heart
-        }))
+        renderHearts(row, player, lifeState)
     })
+    renderScoreGaps(sorted, rowHeight, rowGap)
     updateClientHighlights()
 }
 
@@ -327,6 +393,24 @@ function setText(node, value) {
     node.textContent = next
 }
 
+function setMapTitle(value) {
+    const next = value === undefined || value === null || value === '' ? '—' : String(value)
+    if (mapTitleCopies[0].textContent === next) return
+    mapTitle.classList.remove('scrolling')
+    mapTitle.style.removeProperty('--title-distance')
+    mapTitle.style.removeProperty('--title-duration')
+    mapTitleTrack.style.transform = 'translateX(0)'
+    mapTitleCopies.forEach(copy => { copy.textContent = next })
+    requestAnimationFrame(() => {
+        const titleWidth = mapTitleCopies[0].scrollWidth
+        if (titleWidth <= mapTitle.clientWidth) return
+        const distance = titleWidth + 48
+        mapTitle.style.setProperty('--title-distance', `${distance}px`)
+        mapTitle.style.setProperty('--title-duration', `${Math.max(7, distance / 42)}s`)
+        mapTitle.classList.add('scrolling')
+    })
+}
+
 function mapSourceFromPayload(data) {
     const clients = data.tourney?.clients || data.tourney?.ipcClients || []
     const client = clients.find(item => Number(item.beatmap?.id || item.beatmap?.mapid || 0) || item.beatmap?.title)
@@ -339,6 +423,7 @@ function mapDataFromPayload(data) {
     const id = Number(beatmap.id || beatmap.mapid || 0)
     const pool = mappools[poolName] || mappools.finals || {maps: {}}
     const poolMap = pool.maps?.[String(id)] || {}
+    const poolMatched = Boolean(poolMap.slot)
     const parsed = parseMapName(poolMap.name)
     const stats = beatmap.stats || beatmap.stats?.memory || data.menu?.bm?.stats || {}
     return {
@@ -348,14 +433,14 @@ function mapDataFromPayload(data) {
         title: beatmap.title || poolMap.title || parsed?.title || '—',
         difficulty: beatmap.version || beatmap.difficulty || poolMap.difficulty || parsed?.difficulty || '—',
         mapper: beatmap.mapper || poolMap.mapper || '—',
-        sr: beatmap.stats?.stars?.total || stats.stars || poolMap.sr,
-        bpm: beatmap.stats?.bpm?.common || beatmap.bpm || stats.bpm || poolMap.bpm,
-        cs: beatmap.stats?.cs?.converted || beatmap.stats?.cs?.original || stats.CS || stats.cs || poolMap.cs,
-        ar: beatmap.stats?.ar?.converted || beatmap.stats?.ar?.original || stats.AR || stats.ar || poolMap.ar,
-        od: beatmap.stats?.od?.converted || beatmap.stats?.od?.original || stats.OD || stats.od || poolMap.od,
-        length: beatmap.time?.mp3Length || beatmap.time?.full || beatmap.time?.lastObject || source.menu?.bm?.time?.full
+        sr: poolMatched ? poolMap.sr : beatmap.stats?.stars?.total || stats.stars,
+        bpm: poolMatched ? poolMap.bpm : beatmap.stats?.bpm?.common || beatmap.bpm || stats.bpm,
+        cs: poolMatched ? poolMap.cs : beatmap.stats?.cs?.converted || beatmap.stats?.cs?.original || stats.CS || stats.cs,
+        ar: poolMatched ? poolMap.ar : beatmap.stats?.ar?.converted || beatmap.stats?.ar?.original || stats.AR || stats.ar,
+        od: poolMatched ? poolMap.od : beatmap.stats?.od?.converted || beatmap.stats?.od?.original || stats.OD || stats.od,
+        length: poolMatched ? poolMap.length : beatmap.time?.mp3Length || beatmap.time?.full || beatmap.time?.lastObject || source.menu?.bm?.time?.full
             ? formatDuration(beatmap.time?.mp3Length || beatmap.time?.full || beatmap.time?.lastObject || source.menu?.bm?.time?.full)
-            : poolMap.length,
+            : undefined,
         cover: mapCoverPath(source, beatmap, poolMap)
     }
 }
@@ -395,7 +480,7 @@ function updateMap(data) {
     mapSlot.className = `panel-sticker map-sticker mod-${map.slot.slice(0, 2).toLowerCase()}`
     setText(mapSlot, map.slot)
     setText(mapArtist, map.artist)
-    setText(mapTitle, map.title)
+    setMapTitle(map.title)
     setText(mapDifficulty, map.difficulty)
     setText(mapMapper, map.mapper)
     displayNumber(numberNodes.sr, map.sr, 2)
@@ -532,9 +617,10 @@ async function startPreview() {
         id: Number(player.userId || player.user_id || player.id || 0),
         name: player.username || player.name,
         score: 970000 - index * 43811,
+        accuracy: 99.42 - index * .31,
         mods: index % 4 === 1 ? 'HD' : index % 4 === 2 ? 'HR' : index % 4 === 3 ? 'DT' : 'NM'
     }))
-    renderClientSlots(previewPlayers.map(player => ({user: {id: player.id, name: player.name}, play: {score: player.score}})))
+    renderClientSlots(previewPlayers.map((player, index) => ({user: {id: player.id, name: player.name}, play: {score: player.score, hits: {'0': index % 4}}})))
     let phase = 0
     const update = () => {
         const chaser = phase % previewPlayers.length
