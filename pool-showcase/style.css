@@ -277,6 +277,60 @@ body {
     transform: rotate(1.5deg) scale(1.04);
 }
 
+.round-sticker.long-round {
+    font-size: 28px;
+    padding-inline: 24px;
+}
+
+.map-badge {
+    position: absolute;
+    z-index: 5;
+    top: 43px;
+    right: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 39px;
+    padding: 5px 12px 3px;
+    border: 4px solid var(--white);
+    border-radius: 12px 8px 13px 9px;
+    background-color: var(--pink-soft);
+    background-image: radial-gradient(rgba(255, 255, 255, .7) 1.4px, transparent 1.7px);
+    background-size: 8px 8px;
+    box-shadow: 0 4px 0 var(--pink-depth);
+    color: var(--white);
+    font-family: Arco, sans-serif;
+    font-size: 19px;
+    line-height: 1;
+    letter-spacing: .7px;
+    -webkit-text-stroke: 2px var(--purple-dark);
+    paint-order: stroke fill;
+    transform: rotate(-4deg);
+    transform-origin: right top;
+    pointer-events: none;
+}
+
+.map-badge[hidden] {
+    display: none;
+}
+
+.map-badge[data-type="custom"] {
+    background-color: var(--lavender);
+}
+
+.map-badge svg {
+    width: 19px;
+    height: 19px;
+    stroke: var(--purple-dark);
+    stroke-width: 1.3px;
+    stroke-linejoin: round;
+    paint-order: stroke fill;
+}
+
+.map-badge span {
+    transform: translateY(-2px);
+}
+
 .cover {
     position: relative;
     z-index: 1;

@@ -143,5 +143,27 @@
             "5177765": {"slot": "TB", "artist": "Symholic feat. Rina Komatsu", "title": "Veil of Ash", "difficulty": "Rain", "sr": 4.59, "bpm": 210, "length": "05:14", "cs": 3.9, "ar": 9.1, "od": 9.1, "hp": 5, "mapper": "Yoshi_green", "replayer": "Nelys"}
         },
         "custom": {}
+    },
+    "grand-finals": {
+        "round": "GRAND FINALS",
+        "slots": ["NM1", "NM2", "NM3", "NM4", "HD1", "HD2", "HD3", "HR1", "HR2", "HR3", "DT1", "DT2", "DT3", "TB"],
+        "maps": {
+            "5825992": {"slot": "NM2", "artist": "Camellia as \"Reverse of Riot\"", "title": "Completeness Under Incompleteness", "difficulty": "INFINITE", "beatmapsetId": 2591403},
+            "5064431": {"slot": "NM3", "artist": "CHON", "title": "Ghost", "difficulty": "conscience", "beatmapsetId": 2352759, "keywords": ["Ghost"], "matchField": "difficulty", "badge": "edit", "editor": "yeeter"},
+            "3198042": {"slot": "NM4", "artist": "Yorushika", "title": "Matasaburo", "difficulty": "Delight", "beatmapsetId": 1566187},
+            "4441503": {"slot": "HD1", "artist": "Caravan Palace", "title": "Dragons", "difficulty": "Deif's Rain", "beatmapsetId": 1464027},
+            "3726760": {"slot": "HD2", "artist": "sasakure.UK feat. Shirakami Fubuki", "title": "KINGWORLD", "difficulty": "Platter", "beatmapsetId": 1809620, "keywords": ["KINGWORLD"], "matchField": "difficulty", "badge": "edit", "editor": "nelys"},
+            "5406627": {"slot": "HD3", "artist": "Ikuno Dictus (CV: Tazawa Masumi)", "title": "Excellent Condition", "difficulty": "Rain", "beatmapsetId": 2464655},
+            "4923543": {"slot": "HR1", "artist": "Red Velvet", "title": "Day 1", "difficulty": "Everlasting Love", "beatmapsetId": 2303481, "keywords": ["Day 1"], "matchField": "difficulty", "badge": "edit", "editor": "nelys"},
+            "4140563": {"slot": "HR2", "artist": "Mili", "title": "Rubber Human", "difficulty": "Rain", "beatmapsetId": 1992659, "keywords": ["Rubber Human"], "matchField": "difficulty", "badge": "edit", "editor": "nelys"},
+            "5268583": {"slot": "DT1", "artist": "ELFENSJoN", "title": "ECLIPSE", "difficulty": "Platter", "beatmapsetId": 2410253},
+            "5556128": {"slot": "DT2", "artist": "Yooh", "title": "Eternity", "difficulty": "ZiRoX & Des9's Platter", "beatmapsetId": 2518082, "keywords": ["Eternity"], "matchField": "difficulty", "badge": "edit", "editor": "nelys"},
+            "4759352": {"slot": "DT3", "artist": "DJ Raisei", "title": "Fractured Heaven", "difficulty": "Shameimaru's Platter", "beatmapsetId": 2220494}
+        },
+        "custom": {
+            "Overdrive": {"slot": "NM1", "title": "Overdrive", "badge": "custom"},
+            "Feelings": {"slot": "HR3", "title": "Feelings", "badge": "custom"},
+            "Unwritten": {"slot": "TB", "title": "Unwritten", "badge": "custom"}
+        }
     }
 }
