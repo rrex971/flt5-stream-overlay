@@ -183,7 +183,12 @@ function renderClientSlots(clients) {
             slot.append(misses)
         }
         const missCount = player?.misses || 0
-        misses.textContent = `${missCount}x`
+        if (!misses.counter) {
+            misses.counter = new CountUp(misses, 0, missCount, 0, .2, {useEasing: true, useGrouping: false, suffix: 'x'})
+            misses.counter.start()
+        } else {
+            misses.counter.update(missCount)
+        }
         misses.classList.toggle('visible', Boolean(name && missCount > 0))
         if (!slot.querySelector('.client-status')) {
             const status = document.createElement('div')
@@ -257,6 +262,9 @@ function renderScoreGaps(sorted, rowHeight, rowGap) {
             gap.innerHTML = '<span>▲</span><strong></strong>'
             leaderboard.append(gap)
         }
+        const retained = sorted[index].retained || sorted[index + 1].retained
+        gap.style.display = retained ? 'none' : ''
+        if (retained) continue
         const value = Math.abs(scoreValue(sorted[index]) - scoreValue(sorted[index + 1]))
         gap.style.setProperty('--gap-y', `${(index + 1) * (rowHeight + rowGap) - rowGap / 2}px`)
         const valueNode = gap.querySelector('strong')
@@ -299,7 +307,8 @@ function renderLeaderboard(nextPlayers) {
         if (!players.has(key) || activeLives(player) > 0) players.set(key, {...player})
     })
     const sorted = [...players.values()]
-        .filter(player => connectedKeys.has(playerKey(player)))
+        .filter(player => connectedKeys.has(playerKey(player)) || activeLives(player) === 0)
+        .map(player => ({...player, retained: !connectedKeys.has(playerKey(player))}))
         .sort((a, b) => Number(activeLives(a) === 0) - Number(activeLives(b) === 0) || scoreValue(b) - scoreValue(a) || a.name.localeCompare(b.name))
     const expanded = sorted.length > 8
     const rowGap = 5
@@ -333,10 +342,24 @@ function renderLeaderboard(nextPlayers) {
             avatar.style.opacity = ''
         }
         row.querySelector('.player-name').textContent = player.name
-        row.querySelector('.player-accuracy').textContent = `${Math.max(0, Math.min(100, Number(player.accuracy) || 0)).toFixed(2)}%`
+        const accuracy = Math.max(0, Math.min(100, Number(player.accuracy) || 0))
+        if (player.retained) {
+            if (row.accuracyCounter) row.accuracyCounter.reset()
+            row.accuracyCounter = null
+            row.querySelector('.player-accuracy').textContent = 'N/A'
+        } else if (!row.accuracyCounter) {
+            row.accuracyCounter = new CountUp(row.querySelector('.player-accuracy'), 0, accuracy, 2, .28, {useEasing: true, useGrouping: false, suffix: '%'})
+            row.accuracyCounter.start()
+        } else {
+            row.accuracyCounter.update(accuracy)
+        }
         const score = scoreValue(player)
         const scoreNode = row.querySelector('.player-score')
-        if (!row.scoreCounter) {
+        if (player.retained) {
+            if (row.scoreCounter) row.scoreCounter.reset()
+            row.scoreCounter = null
+            scoreNode.textContent = 'N/A'
+        } else if (!row.scoreCounter) {
             row.scoreCounter = new CountUp(scoreNode, 0, score, 0, .28, {useEasing: true, useGrouping: true, separator: ','})
             row.scoreCounter.start()
         } else {
