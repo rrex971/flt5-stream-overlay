@@ -3,18 +3,26 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>FLT5 Finals Winners</title>
-    <link rel="stylesheet" href="style.css">
+    <title>FLT5 Grand Finals 1 Winners</title>
+    <link rel="stylesheet" href="../finals-winners/style.css">
 </head>
 <body>
-    <main id="overlay">
+    <main id="overlay" class="four-winners" data-round="grand-finals-1">
         <video class="background-art" src="../assets/background.webm" autoplay loop muted playsinline></video>
         <div class="corner-logo"><img src="../assets/flt5-logo.png" alt="FLT5"></div>
         <section class="winner-banner">
             <h1>WINNERS</h1>
-            <p>Advanced to Grand Finals</p>
+            <p>Advanced to Grand Finals 2</p>
         </section>
-        <section class="winner-list" aria-label="Finals winners">
+        <section class="winner-list" aria-label="Grand Finals 1 winners">
+            <article class="winner-card" hidden>
+                <img class="winner-avatar" alt="">
+                <h2 class="winner-name"></h2>
+            </article>
+            <article class="winner-card" hidden>
+                <img class="winner-avatar" alt="">
+                <h2 class="winner-name"></h2>
+            </article>
             <article class="winner-card" hidden>
                 <img class="winner-avatar" alt="">
                 <h2 class="winner-name"></h2>
@@ -27,7 +35,7 @@
     </main>
     <script src="../deps/reconnecting-websocket.min.js"></script>
     <script src="../deps/tournament.js"></script>
-    <script src="index.js"></script>
+    <script src="../finals-winners/index.js"></script>
     <script src="../deps/now-playing.js"></script>
 </body>
 </html>

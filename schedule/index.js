@@ -11,6 +11,7 @@ const tilts = ['-1deg', '.8deg', '-.7deg', '.9deg', '-.8deg', '.7deg'];
 
 let signature = '';
 let relativeTimer;
+let round;
 
 const setScale = () => {
     const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
@@ -22,16 +23,15 @@ const normalize = value => String(value || '').toLowerCase().replace(/[^a-z0-9]/
 const requestedStage = () => {
     const params = new URLSearchParams(location.search);
     return {
-        id: Number(params.get('stageId')) || 0,
-        name: params.get('stage') || 'finals'
+        id: Number(params.get('stageId')) || round.stageId,
+        name: params.get('stage') || round.name
     };
 };
 
 const findStage = stages => {
     const requested = requestedStage();
     return stages.find(stage => requested.id && stage.id === requested.id)
-        || stages.find(stage => normalize(stage.name) === normalize(requested.name))
-        || stages.find(stage => normalize(stage.name) === 'finals');
+        || stages.find(stage => normalize(stage.name) === normalize(requested.name));
 };
 
 const formatDate = timestamp => new Intl.DateTimeFormat('en-US', {
@@ -73,15 +73,18 @@ const updateRelativeTimes = () => {
     relativeTimer = setTimeout(updateRelativeTimes, 1000 - Date.now() % 1000 + 5);
 };
 
-const playerNames = match => {
+const matchPlayers = match => {
     const solo = match.qualifierSoloParticipants || [];
     const teams = match.qualifierTeamParticipants || [];
-    const names = solo.map(entry => entry.user?.userOsu?.username || entry.user?.username)
-        .concat(teams.map(entry => entry.team?.name || entry.name));
-    if (match.playerOne?.user?.username) names.push(match.playerOne.user.username);
-    if (match.playerTwo?.user?.username) names.push(match.playerTwo.user.username);
-    return names.filter(Boolean);
+    const players = solo.map(entry => ({id: entry.user?.userOsu?.id, name: entry.user?.userOsu?.username || entry.user?.username}))
+        .concat(teams.map(entry => ({name: entry.team?.name || entry.name})));
+    for (const participant of [match.playerOne, match.playerTwo]) {
+        if (participant?.user?.username) players.push({id: participant.user.userOsu?.id, name: participant.user.userOsu?.username || participant.user.username});
+    }
+    return players.filter(player => player.name);
 };
+
+const playerNames = match => matchPlayers(match).map(player => player.name);
 
 const refereeNames = match => (match.assignedReferees || [])
     .map(entry => entry.user?.userOsu?.username || entry.user?.username)
@@ -111,10 +114,20 @@ const createMatchCard = (match, index) => {
 
     const list = document.createElement('div');
     list.className = 'player-list';
-    list.replaceChildren(...playerNames(match).map(name => {
+    list.replaceChildren(...matchPlayers(match).map(({id, name}) => {
         const player = document.createElement('div');
         player.className = 'player';
-        player.textContent = name;
+        if (id) {
+            const avatar = document.createElement('img');
+            avatar.className = 'schedule-avatar';
+            avatar.src = `https://a.ppy.sh/${id}`;
+            avatar.alt = '';
+            avatar.addEventListener('error', () => { avatar.hidden = true; });
+            player.append(avatar);
+        }
+        const username = document.createElement('span');
+        username.textContent = name;
+        player.append(username);
         return player;
     }));
 
@@ -131,12 +144,14 @@ const createMatchCard = (match, index) => {
 };
 
 const render = stage => {
-    const matches = (stage?.matches || []).filter(match => !match.softDeleted);
+    const matches = (stage?.matches || []).filter(match => !match.softDeleted).sort((a, b) => matchTimestamp(a) - matchTimestamp(b));
     const nextSignature = JSON.stringify(matches.map(match => [match.id, match.date, match.time, playerNames(match), refereeNames(match)]));
-    ui.stage.textContent = stage?.name?.toUpperCase() || requestedStage().name.toUpperCase();
+    ui.stage.textContent = stage?.id === round.stageId || !stage?.id ? round.name : stage.name.toUpperCase();
+    ui.stage.parentElement.classList.toggle('long-round', ui.stage.textContent.length > 10);
     if (nextSignature === signature) return;
     signature = nextSignature;
     ui.grid.classList.toggle('eight-up', matches.length > 6);
+    ui.grid.classList.toggle('two-up', matches.length === 2);
     ui.grid.replaceChildren(...matches.map(createMatchCard));
     ui.empty.classList.toggle('visible', !matches.length);
     updateRelativeTimes();
@@ -153,7 +168,13 @@ const load = async () => {
     }
 };
 
-window.addEventListener('resize', setScale);
-setScale();
-load();
-setInterval(load, 60000);
+const init = async () => {
+    window.addEventListener('resize', setScale);
+    setScale();
+    await FLT5Tournament.load();
+    round = FLT5Tournament.select(new URLSearchParams(location.search));
+    await load();
+    setInterval(load, 60000);
+};
+
+init();

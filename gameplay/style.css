@@ -215,6 +215,20 @@ body {
     backdrop-filter: brightness(1.06) saturate(.72);
 }
 
+.client-slot.empty::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 164px;
+    height: 164px;
+    background: url('../assets/flt5-logo.png') center / contain no-repeat;
+    filter: grayscale(1);
+    opacity: .18;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
 .client-slot span {
     position: absolute;
     z-index: 2;
@@ -427,11 +441,17 @@ body {
     text-shadow: 0 4px 0 var(--yellow);
     box-shadow: 0 7px 0 rgba(222, 98, 159, .22);
     transform: rotate(-3deg);
+    cursor: pointer;
 }
 
 .round-sticker span {
     display: inline-block;
     transform: translateY(-3px);
+}
+
+.round-sticker.long-round {
+    font-size: 28px;
+    padding-inline: 24px;
 }
 
 .leaderboard-panel,
@@ -728,6 +748,55 @@ body {
     box-shadow: 0 6px 0 var(--pink-depth);
 }
 
+.map-badge {
+    position: absolute;
+    z-index: 5;
+    top: -20px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 39px;
+    padding: 5px 12px 3px;
+    border: 4px solid var(--white);
+    border-radius: 12px 8px 13px 9px;
+    background-color: var(--pink-soft);
+    background-image: radial-gradient(rgba(255, 255, 255, .7) 1.4px, transparent 1.7px);
+    background-size: 8px 8px;
+    box-shadow: 0 4px 0 var(--pink-depth);
+    color: var(--white);
+    font-family: Arco, sans-serif;
+    font-size: 19px;
+    line-height: 1;
+    letter-spacing: .7px;
+    -webkit-text-stroke: 2px var(--purple-dark);
+    paint-order: stroke fill;
+    transform: rotate(-4deg);
+    transform-origin: right top;
+    pointer-events: none;
+}
+
+.map-badge[hidden] {
+    display: none;
+}
+
+.map-badge[data-type="custom"] {
+    background-color: var(--lavender);
+}
+
+.map-badge svg {
+    width: 19px;
+    height: 19px;
+    stroke: var(--purple-dark);
+    stroke-width: 1.3px;
+    stroke-linejoin: round;
+    paint-order: stroke fill;
+}
+
+.map-badge span {
+    transform: translateY(-2px);
+}
+
 .map-cover {
     position: absolute;
     z-index: 2;
@@ -748,6 +817,16 @@ body {
 .cover-layer {
     background-position: center;
     background-size: cover;
+    opacity: 0;
+    filter: blur(8px) saturate(.88);
+    transform: scale(1.06);
+    transition: opacity 320ms cubic-bezier(.16, 1, .3, 1), filter 320ms cubic-bezier(.16, 1, .3, 1), transform 480ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.cover-layer.active {
+    opacity: 1;
+    filter: blur(0) saturate(1);
+    transform: scale(1);
 }
 
 .map-copy {
@@ -759,6 +838,22 @@ body {
     height: 120px;
     overflow: hidden;
     color: var(--purple-dark);
+}
+
+.map-copy.text-leaving {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(-5px);
+    transition: opacity 110ms cubic-bezier(.16, 1, .3, 1), filter 110ms cubic-bezier(.16, 1, .3, 1), transform 110ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.map-copy.text-entering {
+    animation: map-copy-in 210ms cubic-bezier(.16, 1, .3, 1) both;
+}
+
+@keyframes map-copy-in {
+    from { opacity: 0; filter: blur(4px); transform: translateY(6px); }
+    to { opacity: 1; filter: blur(0); transform: translateY(0); }
 }
 
 .map-artist,

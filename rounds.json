@@ -1,0 +1,91 @@
+{
+    "default": "grand-finals-1",
+    "endpoint": "https://wybin.xyz/api/v1/tournament-stages/147",
+    "rounds": {
+        "finals": {
+            "name": "FINALS",
+            "pool": "finals",
+            "stageId": 1033,
+            "winners": 2,
+            "advancesTo": "Grand Finals",
+            "lobbies": []
+        },
+        "grand-finals-1": {
+            "name": "GRAND FINALS 1",
+            "pool": "grand-finals",
+            "stageId": 1034,
+            "winners": 4,
+            "advancesTo": "Grand Finals 2",
+            "lobbies": [
+                {
+                    "id": 12218,
+                    "label": "GF1",
+                    "players": [
+                        {
+                            "id": 11625617,
+                            "name": "ERA medium kek"
+                        },
+                        {
+                            "id": 10027022,
+                            "name": "_anjay"
+                        },
+                        {
+                            "id": 14084526,
+                            "name": "Joyy"
+                        },
+                        {
+                            "id": 19121768,
+                            "name": "sphlefy"
+                        },
+                        {
+                            "id": 38952920,
+                            "name": "Dreems"
+                        },
+                        {
+                            "id": 23701850,
+                            "name": "verzter"
+                        },
+                        {
+                            "id": 34700655,
+                            "name": "hulgodoo"
+                        }
+                    ]
+                },
+                {
+                    "id": 12217,
+                    "label": "GF2",
+                    "players": [
+                        {
+                            "id": 39840050,
+                            "name": "Sabon"
+                        },
+                        {
+                            "id": 18658630,
+                            "name": "Prinow6"
+                        },
+                        {
+                            "id": 7512553,
+                            "name": "Utami"
+                        },
+                        {
+                            "id": 9562353,
+                            "name": "Musubi"
+                        },
+                        {
+                            "id": 4641477,
+                            "name": "aaront"
+                        },
+                        {
+                            "id": 16197009,
+                            "name": "ThePurpleExpert"
+                        },
+                        {
+                            "id": 12640485,
+                            "name": "Smore Cookie"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

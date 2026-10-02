@@ -145,25 +145,24 @@
         "custom": {}
     },
     "grand-finals": {
-        "round": "GRAND FINALS",
+        "round": "GRAND FINALS 1",
         "slots": ["NM1", "NM2", "NM3", "NM4", "HD1", "HD2", "HD3", "HR1", "HR2", "HR3", "DT1", "DT2", "DT3", "TB"],
         "maps": {
-            "5825992": {"slot": "NM2", "artist": "Camellia as \"Reverse of Riot\"", "title": "Completeness Under Incompleteness", "difficulty": "INFINITE", "beatmapsetId": 2591403},
-            "5064431": {"slot": "NM3", "artist": "CHON", "title": "Ghost", "difficulty": "conscience", "beatmapsetId": 2352759, "keywords": ["Ghost"], "matchField": "difficulty", "badge": "edit", "editor": "yeeter"},
-            "3198042": {"slot": "NM4", "artist": "Yorushika", "title": "Matasaburo", "difficulty": "Delight", "beatmapsetId": 1566187},
-            "4441503": {"slot": "HD1", "artist": "Caravan Palace", "title": "Dragons", "difficulty": "Deif's Rain", "beatmapsetId": 1464027},
-            "3726760": {"slot": "HD2", "artist": "sasakure.UK feat. Shirakami Fubuki", "title": "KINGWORLD", "difficulty": "Platter", "beatmapsetId": 1809620, "keywords": ["KINGWORLD"], "matchField": "difficulty", "badge": "edit", "editor": "nelys"},
-            "5406627": {"slot": "HD3", "artist": "Ikuno Dictus (CV: Tazawa Masumi)", "title": "Excellent Condition", "difficulty": "Rain", "beatmapsetId": 2464655},
-            "4923543": {"slot": "HR1", "artist": "Red Velvet", "title": "Day 1", "difficulty": "Everlasting Love", "beatmapsetId": 2303481, "keywords": ["Day 1"], "matchField": "difficulty", "badge": "edit", "editor": "nelys"},
-            "4140563": {"slot": "HR2", "artist": "Mili", "title": "Rubber Human", "difficulty": "Rain", "beatmapsetId": 1992659, "keywords": ["rubber"], "matchField": "difficulty", "badge": "edit", "editor": "nelys"},
-            "5268583": {"slot": "DT1", "artist": "ELFENSJoN", "title": "ECLIPSE", "difficulty": "Platter", "beatmapsetId": 2410253},
-            "5556128": {"slot": "DT2", "artist": "Yooh", "title": "Eternity", "difficulty": "ZiRoX & Des9's Platter", "beatmapsetId": 2518082, "keywords": ["Eternity"], "matchField": "difficulty", "badge": "edit", "editor": "nelys"},
-            "4759352": {"slot": "DT3", "artist": "DJ Raisei", "title": "Fractured Heaven", "difficulty": "Shameimaru's Platter", "beatmapsetId": 2220494}
+            "3198042": {"slot": "NM4", "artist": "Yorushika", "title": "Matasaburo", "difficulty": "Delight", "beatmapsetId": 1566187, "sr": 4.78, "bpm": 200, "length": "03:46", "cs": 4, "ar": 9.3, "od": 8.7, "hp": 6, "mapper": "Aragon"},
+            "4441503": {"slot": "HD1", "artist": "Caravan Palace", "title": "Dragons", "difficulty": "Deif's Rain", "beatmapsetId": 1464027, "sr": 4.6, "bpm": 124, "length": "03:40", "cs": 3.8, "ar": 9, "od": 9, "hp": 5, "mapper": "Spectator"},
+            "4759352": {"slot": "DT3", "artist": "DJ Raisei", "title": "Fractured Heaven", "difficulty": "Shameimaru's Platter", "beatmapsetId": 2220494, "sr": 4.57, "bpm": 465, "length": "01:48", "cs": 3.5, "ar": 9.8, "od": 9.88, "hp": 4, "mapper": "Zileni"},
+            "5268583": {"slot": "DT1", "artist": "ELFENSJoN", "title": "ECLIPSE", "difficulty": "Platter", "beatmapsetId": 2410253, "sr": 4.81, "bpm": 322.5, "length": "02:17", "cs": 3.5, "ar": 9.67, "od": 9.75, "hp": 3, "mapper": "-Luminate"},
+            "5406627": {"slot": "HD3", "artist": "Ikuno Dictus (CV: Tazawa Masumi)", "title": "Excellent Condition", "difficulty": "Rain", "beatmapsetId": 2464655, "sr": 4.43, "bpm": 175, "length": "03:41", "cs": 3.8, "ar": 9.2, "od": 9.2, "hp": 5, "mapper": "-Rustyy"},
+            "5825992": {"slot": "NM2", "artist": "Camellia as \"Reverse of Riot\"", "title": "Completeness Under Incompleteness", "difficulty": "INFINITE", "beatmapsetId": 2591403, "sr": 5.12, "bpm": 194, "length": "02:01", "cs": 4, "ar": 9.3, "od": 9.3, "hp": 5.5, "mapper": "FruktoLove"},
+            "5907457": {"slot": "HR3", "artist": "P4koo", "title": "Feelings of fake (feat. Tsuyuri Karin)", "difficulty": "Rain (FLT5 version)", "beatmapsetId": 2628115, "sr": 4.57, "bpm": 203, "length": "02:12", "cs": 5.2, "ar": 9.8, "od": 9.8, "hp": 6.5, "mapper": "Beepu", "keywords": ["Feelings"], "badge": "custom"},
+            "5907559": {"slot": "NM1", "artist": "Harada Hitomi", "title": "Overdrive", "difficulty": "Transformation", "beatmapsetId": 2628147, "sr": 5.02, "bpm": 182, "length": "03:57", "cs": 4, "ar": 9.3, "od": 9.3, "hp": 5, "mapper": "16-bit Princess", "keywords": ["Overdrive"], "badge": "custom"},
+            "5907590": {"slot": "TB", "artist": "RiTSUMUGo", "title": "Unwritten Thread of Fate", "difficulty": "Final Thread", "beatmapsetId": 2628153, "sr": 6.19, "bpm": 200, "length": "07:10", "cs": 4, "ar": 9.6, "od": 9.6, "hp": 5, "mapper": "yeeeter", "keywords": ["Unwritten"], "badge": "custom"},
+            "5907935": {"slot": "DT2", "artist": "Yooh", "title": "Eternity", "difficulty": "ZiRoX & Nelys & Des9's Platter", "beatmapsetId": 2628287, "sr": 4.52, "bpm": 300, "length": "02:14", "cs": 3.5, "ar": 9.53, "od": 9.62, "hp": 4, "mapper": "Nelys", "keywords": ["Eternity"], "matchField": "difficulty", "badge": "edit", "editor": "nelys", "originalBeatmapId": 5556128},
+            "5907936": {"slot": "HD2", "artist": "sasakure.UK feat. Shirakami Fubuki", "title": "KINGWORLD", "difficulty": "Platter", "beatmapsetId": 2628287, "sr": 3.49, "bpm": 240, "length": "02:21", "cs": 3.5, "ar": 8.1, "od": 8.1, "hp": 4, "mapper": "Nelys", "keywords": ["KINGWORLD"], "matchField": "difficulty", "badge": "edit", "editor": "nelys", "originalBeatmapId": 3726760},
+            "5907937": {"slot": "HR1", "artist": "Red Velvet", "title": "Day 1", "difficulty": "Everlasting Love", "beatmapsetId": 2628287, "sr": 4.31, "bpm": 172, "length": "03:20", "cs": 4.81, "ar": 10, "od": 10, "hp": 6.5, "mapper": "Nelys", "keywords": ["Day 1"], "matchField": "difficulty", "badge": "edit", "editor": "nelys", "originalBeatmapId": 4923543},
+            "5907938": {"slot": "HR2", "artist": "Mili", "title": "Rubber Human", "difficulty": "Rain", "beatmapsetId": 2628287, "sr": 4.07, "bpm": 124, "length": "02:04", "cs": 5.59, "ar": 9.7, "od": 9.7, "hp": 6.5, "mapper": "Nelys", "keywords": ["rubber"], "matchField": "difficulty", "badge": "edit", "editor": "nelys", "originalBeatmapId": 4140563},
+            "5907939": {"slot": "NM3", "artist": "CHON", "title": "Ghost", "difficulty": "conscience", "beatmapsetId": 2628287, "sr": 3.7, "bpm": 140, "length": "01:36", "cs": 4, "ar": 8.7, "od": 8.7, "hp": 4, "mapper": "Nelys", "keywords": ["Ghost"], "matchField": "difficulty", "badge": "edit", "editor": "yeeter", "originalBeatmapId": 5064431}
         },
-        "custom": {
-            "Overdrive": {"slot": "NM1", "title": "Overdrive", "badge": "custom"},
-            "Feelings": {"slot": "HR3", "title": "Feelings", "badge": "custom"},
-            "Unwritten": {"slot": "TB", "title": "Unwritten", "badge": "custom"}
-        }
+        "custom": {}
     }
 }

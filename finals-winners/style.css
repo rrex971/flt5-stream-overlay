@@ -138,16 +138,16 @@ body {
     transform: rotate(-1deg);
 }
 
-.winner-card:nth-child(2) {
+.winner-card:nth-child(even) {
     border-radius: 22px 34px 24px 32px;
     transform: rotate(1deg);
 }
 
-.winner-card:first-child {
+.winner-card:nth-child(odd) {
     background-color: #8dd7ff;
 }
 
-.winner-card:nth-child(2) {
+.winner-card:nth-child(even) {
     background-color: #ffd46f;
 }
 
@@ -179,6 +179,33 @@ body {
 
 .winner-card.visible {
     animation: winner-in 320ms cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.four-winners .winner-list {
+    top: 414px;
+    left: 220px;
+    width: 1480px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 50px 80px;
+}
+
+.four-winners .winner-card {
+    width: 700px;
+    height: 224px;
+    gap: 28px;
+    padding: 22px;
+}
+
+.four-winners .winner-avatar {
+    width: 164px;
+    height: 164px;
+}
+
+.four-winners .winner-name {
+    max-width: 438px;
+    font-size: 46px;
+    line-height: 1.12;
 }
 
 @keyframes winner-in {

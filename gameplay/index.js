@@ -2,7 +2,7 @@ const params = new URLSearchParams(location.search)
 const previewMode = params.get('preview') === '1'
 const previewPlayerCount = Math.min(10, Math.max(1, Number(params.get('players')) || 8))
 const clientLayout = Number(params.get('clients')) === 10 ? 10 : 8
-const poolName = params.get('pool') || 'finals'
+let poolName = params.get('pool') || 'grand-finals'
 const twitchChannel = (params.get('channel') || 'raybean_osu').toLowerCase().replace(/^#/, '')
 const overlay = document.getElementById('overlay')
 const leaderboardPanel = document.querySelector('.leaderboard-panel')
@@ -19,6 +19,9 @@ const mapTitleCopies = [...mapTitleTrack.querySelectorAll('span')]
 const mapDifficulty = document.getElementById('map-difficulty')
 const mapMapper = document.getElementById('map-mapper')
 const coverCurrent = document.getElementById('cover-current')
+const coverLayers = [...document.querySelectorAll('.cover-layer')]
+const mapCopy = document.querySelector('.map-copy')
+const setMapBadge = FLT5Pool.createBadge(document.getElementById('map-badge'))
 const numberNodes = {
     sr: document.getElementById('map-sr'),
     bpm: document.getElementById('map-bpm'),
@@ -32,11 +35,18 @@ const clientSlots = [...document.querySelectorAll('.client-slot')]
 overlay.classList.toggle('layout-10', clientLayout === 10)
 
 let mappools = {}
+let tournamentRound
+let tournamentState
 let players = new Map()
 let lobbyPlayers = []
 let lives = loadLives()
 let currentBeatmapId = 0
 let currentCover = ''
+let pendingCover = ''
+let coverRequest = 0
+let activeCover = 0
+let mapCopySignature = ''
+let mapCopyRequest = 0
 let roundState = null
 let gameplayActive = false
 let lastChatSignature = ''
@@ -97,15 +107,25 @@ function syncClientStatus(slot, style = getComputedStyle(slot)) {
 }
 
 function loadLives() {
-    try {
-        return JSON.parse(localStorage.getItem('flt5-gameplay-lives') || '{}')
-    } catch {
-        return {}
-    }
+    return tournamentState?.read('lives', {}) || {}
+}
+
+function loadEliminated() {
+    const saved = tournamentState.read('eliminated', [])
+    return new Map((Array.isArray(saved) ? saved : []).map(player => [playerKey(player), player]))
+}
+
+function resetLobby() {
+    tournamentState.reset()
+    lives = {}
+    players = new Map()
+    roundState = null
+    renderLeaderboard(lobbyPlayers)
 }
 
 function saveLives() {
-    localStorage.setItem('flt5-gameplay-lives', JSON.stringify(lives))
+    tournamentState.write('lives', lives)
+    if (tournamentRound.key === 'grand-finals-1' && !previewMode) tournamentState.capture(lobbyPlayers, lives)
 }
 
 function playerKey(player) {
@@ -300,6 +320,11 @@ function renderHearts(row, player, lifeState) {
 
 function renderLeaderboard(nextPlayers) {
     const validPlayers = nextPlayers.filter(player => player.name).slice(0, 10)
+    if (tournamentState.usePlayers(validPlayers)) {
+        players = loadEliminated()
+        lives = loadLives()
+        roundState = null
+    }
     lobbyPlayers = validPlayers
     const connectedKeys = new Set(validPlayers.map(playerKey))
     validPlayers.forEach(player => {
@@ -369,6 +394,8 @@ function renderLeaderboard(nextPlayers) {
     })
     renderScoreGaps(sorted, rowHeight, rowGap)
     updateClientHighlights()
+    tournamentState.write('eliminated', sorted.filter(player => activeLives(player) === 0).map(({retained, ...player}) => player))
+    if (tournamentRound.key === 'grand-finals-1' && !previewMode) tournamentState.capture(validPlayers, lives)
 }
 
 function handleRound(playersNow, beatmapId, pointTotal, playing) {
@@ -398,11 +425,11 @@ function handleRound(playersNow, beatmapId, pointTotal, playing) {
 
 function resolveLastPlace(state) {
     const roundKey = `${state.beatmapId}:${state.pointTotal}`
-    if (localStorage.getItem('flt5-gameplay-last-deduction') === roundKey) return
+    if (localStorage.getItem(tournamentState.key('last-deduction')) === roundKey) return
     const eligible = state.snapshot.filter(player => activeLives(player) > 0)
     if (!eligible.length) return
     eligible.sort((a, b) => scoreValue(a) - scoreValue(b))
-    if (deductLife(eligible[0])) localStorage.setItem('flt5-gameplay-last-deduction', roundKey)
+    if (deductLife(eligible[0])) localStorage.setItem(tournamentState.key('last-deduction'), roundKey)
 }
 
 function parseMapName(name) {
@@ -444,17 +471,18 @@ function mapSourceFromPayload(data) {
 function mapDataFromPayload(data) {
     const {source, beatmap} = mapSourceFromPayload(data)
     const id = Number(beatmap.id || beatmap.mapid || 0)
-    const pool = mappools[poolName] || mappools.finals || {maps: {}}
-    const poolMap = pool.maps?.[String(id)] || {}
+    const pool = FLT5Pool.find(mappools, poolName)
+    const poolMap = FLT5Pool.resolve(pool, beatmap)
     const poolMatched = Boolean(poolMap.slot)
     const parsed = parseMapName(poolMap.name)
     const stats = beatmap.stats || beatmap.stats?.memory || data.menu?.bm?.stats || {}
     return {
         id,
         slot: poolMap.slot || 'MAP',
-        artist: beatmap.artist || poolMap.artist || parsed?.artist || '—',
-        title: beatmap.title || poolMap.title || parsed?.title || '—',
-        difficulty: beatmap.version || beatmap.difficulty || poolMap.difficulty || parsed?.difficulty || '—',
+        badge: poolMap.badge,
+        artist: poolMap.artist || parsed?.artist || beatmap.artist || '—',
+        title: poolMap.title || parsed?.title || beatmap.title || '—',
+        difficulty: poolMap.difficulty || parsed?.difficulty || beatmap.version || beatmap.difficulty || '—',
         mapper: beatmap.mapper || poolMap.mapper || '—',
         sr: poolMatched ? poolMap.sr : beatmap.stats?.stars?.total || stats.stars,
         bpm: poolMatched ? poolMap.bpm : beatmap.stats?.bpm?.common || beatmap.bpm || stats.bpm,
@@ -486,15 +514,58 @@ function mapCoverPath(data, beatmap, poolMap) {
 
 function displayNumber(node, value, decimals = 1) {
     if (value === undefined || value === null || value === '') {
+        node.counter?.reset()
+        node.counter = null
         setText(node, '—')
         return
     }
     const next = Number(value)
     if (!Number.isFinite(next)) {
+        node.counter?.reset()
+        node.counter = null
         setText(node, value)
         return
     }
-    node.textContent = decimals ? next.toFixed(decimals).replace(/\.0$/, '') : Math.round(next).toString()
+    if (!node.counter) {
+        node.counter = new CountUp(node, next, next, decimals, .35, {useEasing: true, useGrouping: false, formattingFn: value => decimals ? Number(value.toFixed(decimals)).toString() : Math.round(value).toString()})
+        node.counter.start()
+    } else {
+        node.counter.update(next)
+    }
+}
+
+function setMapCopy(map) {
+    const signature = [map.artist, map.title, map.difficulty, map.mapper].join('\u0000')
+    if (signature === mapCopySignature) return
+    const firstEntry = !mapCopySignature
+    mapCopySignature = signature
+    const request = ++mapCopyRequest
+    const apply = () => {
+        setText(mapArtist, map.artist)
+        setMapTitle(map.title)
+        setText(mapDifficulty, map.difficulty)
+        setText(mapMapper, map.mapper)
+    }
+    mapCopy.classList.remove('text-entering')
+    if (firstEntry || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        apply()
+        mapCopy.classList.add('text-entering')
+        setTimeout(() => {
+            if (request === mapCopyRequest) mapCopy.classList.remove('text-entering')
+        }, 210)
+        return
+    }
+    mapCopy.classList.add('text-leaving')
+    setTimeout(() => {
+        if (request !== mapCopyRequest) return
+        apply()
+        mapCopy.classList.remove('text-leaving')
+        void mapCopy.offsetWidth
+        mapCopy.classList.add('text-entering')
+        setTimeout(() => {
+            if (request === mapCopyRequest) mapCopy.classList.remove('text-entering')
+        }, 210)
+    }, 110)
 }
 
 function updateMap(data) {
@@ -502,10 +573,8 @@ function updateMap(data) {
     currentBeatmapId = map.id
     mapSlot.className = `panel-sticker map-sticker mod-${map.slot.slice(0, 2).toLowerCase()}`
     setText(mapSlot, map.slot)
-    setText(mapArtist, map.artist)
-    setMapTitle(map.title)
-    setText(mapDifficulty, map.difficulty)
-    setText(mapMapper, map.mapper)
+    setMapBadge(map.badge)
+    setMapCopy(map)
     displayNumber(numberNodes.sr, map.sr, 2)
     displayNumber(numberNodes.bpm, map.bpm, 0)
     displayNumber(numberNodes.cs, map.cs)
@@ -517,16 +586,49 @@ function updateMap(data) {
 
 function updateCover(url) {
     const mapCover = coverCurrent.parentElement
-    if (!url) {
-        currentCover = ''
-        coverCurrent.style.backgroundImage = ''
-        mapCover.classList.remove('has-cover')
+    if (url === pendingCover) return
+    if (url === currentCover) {
+        if (pendingCover) {
+            coverRequest += 1
+            pendingCover = ''
+        }
         return
     }
-    if (url === currentCover) return
-    currentCover = url
-    coverCurrent.style.backgroundImage = `url("${url.replace(/"/g, '%22')}")`
-    mapCover.classList.add('has-cover')
+    const request = ++coverRequest
+    if (!url) {
+        currentCover = ''
+        pendingCover = ''
+        coverLayers.forEach(layer => layer.classList.remove('active'))
+        mapCover.classList.remove('has-cover')
+        setTimeout(() => {
+            if (request === coverRequest) coverLayers.forEach(layer => { layer.style.backgroundImage = '' })
+        }, 520)
+        return
+    }
+    pendingCover = url
+    const image = new Image()
+    image.onload = () => {
+        if (request !== coverRequest) return
+        const nextCover = activeCover === 0 ? 1 : 0
+        const incoming = coverLayers[nextCover]
+        const outgoing = coverLayers[activeCover]
+        incoming.classList.remove('active')
+        incoming.style.backgroundImage = `url("${url.replace(/"/g, '%22')}")`
+        void incoming.offsetWidth
+        outgoing.classList.remove('active')
+        incoming.classList.add('active')
+        activeCover = nextCover
+        currentCover = url
+        pendingCover = ''
+        mapCover.classList.add('has-cover')
+        setTimeout(() => {
+            if (request === coverRequest) outgoing.style.backgroundImage = ''
+        }, 520)
+    }
+    image.onerror = () => {
+        if (request === coverRequest) pendingCover = ''
+    }
+    image.src = url
 }
 
 function chatMessageFromEntry(entry) {
@@ -627,65 +729,119 @@ function connectTwitch() {
 
 async function startPreview() {
     setGameplayActive(params.get('playing') !== '0')
-    const [seedResponse] = await Promise.all([fetch('../qualifier-seeds.json')])
-    const seedData = await seedResponse.json()
+    const seedData = await fetch('../qualifier-seeds.json').then(response => response.json())
     const rawPlayers = Array.isArray(seedData) ? seedData : seedData.players || Object.values(seedData)
     const fields = seedData.fields || []
     const sourcePlayers = rawPlayers.map(player => Array.isArray(player)
         ? Object.fromEntries(fields.map((field, index) => [field, player[index]]))
         : player)
-    const pool = mappools[poolName] || mappools.finals
-    const [mapId, poolMap] = Object.entries(pool.maps).find(([, map]) => map.slot === pool.slots[0]) || Object.entries(pool.maps)[0]
+    const pool = FLT5Pool.find(mappools, poolName)
     const previewPlayers = sourcePlayers.slice(0, previewPlayerCount).map((player, index) => ({
         id: Number(player.userId || player.user_id || player.id || 0),
         name: player.username || player.name,
         score: 970000 - index * 43811,
         accuracy: 99.42 - index * .31,
-        mods: index % 4 === 1 ? 'HD' : index % 4 === 2 ? 'HR' : index % 4 === 3 ? 'DT' : 'NM'
+        misses: index % 4,
+        mods: ''
     }))
-    renderClientSlots(previewPlayers.map((player, index) => ({user: {id: player.id, name: player.name}, play: {score: player.score, hits: {'0': index % 4}}})))
+    tournamentState.usePlayers(previewPlayers)
+    lives = loadLives()
+    const eliminatedCount = Math.min(2, Math.max(0, previewPlayers.length - 4))
+    previewPlayers.forEach((player, index) => {
+        lives[playerKey(player)] = index >= previewPlayers.length - eliminatedCount ? [false, false] : [true, true]
+    })
+    saveLives()
+    renderLeaderboard(previewPlayers)
     let phase = 0
     const update = () => {
-        const chaser = phase % previewPlayers.length
-        const runnerUp = (phase + 1) % previewPlayers.length
-        previewPlayers.forEach((player, index) => {
+        const eligible = previewPlayers.filter(player => activeLives(player) > 0)
+        const chaser = phase % eligible.length
+        const runnerUp = (phase + 1) % eligible.length
+        eligible.forEach((player, index) => {
             const steadyGain = 8000 + ((index * 11 + phase * 17) % 6) * 2500
             player.score += index === chaser ? 220000 : index === runnerUp ? 100000 : steadyGain
+            player.accuracy = Math.max(94, Math.min(100, player.accuracy + (index === chaser ? .07 : -.02)))
+            if (phase && phase % 9 === index % 9) player.misses += 1
         })
-        renderLeaderboard(previewPlayers)
+        const connected = eliminatedCount ? previewPlayers.slice(0, -1) : previewPlayers
+        renderLeaderboard(connected)
+        renderClientSlots(connected.map(player => ({user: {id: player.id, name: player.name}, play: {score: player.score, accuracy: player.accuracy, hits: {'0': player.misses}}})))
         phase += 1
     }
     update()
     previewTimer = setInterval(update, 450)
-    updateMap({
-        beatmap: {
-            id: Number(mapId),
-            artist: poolMap.artist,
-            title: poolMap.title,
-            version: poolMap.difficulty,
-            mapper: poolMap.mapper,
-            stats: {stars: {total: poolMap.sr}, bpm: {common: poolMap.bpm}, cs: {original: poolMap.cs}, ar: {original: poolMap.ar}, od: {original: poolMap.od}}
-        }
-    })
-    renderIngameChat([
+    const mapCycle = ['NM1', 'NM2', 'NM3', 'HD2', 'HR2', 'DT2', 'TB']
+        .map(slot => Object.entries(pool.maps).find(([, map]) => map.slot === slot))
+        .filter(Boolean)
+    let mapIndex = 0
+    const showMap = () => {
+        const [mapId, map] = mapCycle[mapIndex % mapCycle.length]
+        updateMap({
+            beatmap: {
+                id: Number(mapId),
+                artist: map.badge === 'edit' ? 'Various Artists' : map.artist,
+                title: map.badge === 'edit' ? 'FLT5 Grand Finals Edits Pack' : map.title,
+                version: map.badge === 'edit' ? `${map.slot} - ${map.title} [${map.difficulty}]` : map.difficulty,
+                mapper: map.mapper,
+                set: {id: map.beatmapsetId},
+                stats: {stars: {total: map.sr}, bpm: {common: map.bpm}, cs: {original: map.cs}, ar: {original: map.ar}, od: {original: map.od}}
+            }
+        })
+        mapIndex += 1
+    }
+    showMap()
+    setInterval(showMap, 6000)
+    const messages = [
         {name: 'BanchoBot', message: 'Match started', team: 'system'},
-        {name: previewPlayers[0]?.name || 'PLAYER', message: 'gl everyone!', team: 'player'},
+        {name: previewPlayers[0].name, message: 'gl everyone!', team: 'player'},
         {name: 'Referee', message: 'Have fun!', team: 'referee'}
-    ])
+    ]
+    renderIngameChat(messages)
+    const ingameSamples = ['That was close!', 'Next map is ready.', 'Good luck on this one!', 'Still in the running.', 'Nice play!']
+    const twitchSamples = ['This lobby is so close!', 'That lead keeps changing', 'Great map pick', 'Good luck everyone!', 'What a finish!']
+    let messageIndex = 0
+    const showMessages = () => {
+        const player = previewPlayers[messageIndex % previewPlayers.length]
+        messages.push({name: player.name, message: ingameSamples[messageIndex % ingameSamples.length], team: 'player'})
+        if (messages.length > 20) messages.shift()
+        renderIngameChat(messages)
+        appendTwitchMessage(['raybean_osu', 'fruitloops_fan', 'stream_viewer'][messageIndex % 3], twitchSamples[messageIndex % twitchSamples.length])
+        messageIndex += 1
+    }
+    showMessages()
+    setInterval(showMessages, 2100)
 }
 
 async function init() {
     fitOverlay()
     addEventListener('resize', fitOverlay)
+    await FLT5Tournament.load()
+    tournamentRound = FLT5Tournament.select(params)
+    tournamentState = FLT5Tournament.createState(tournamentRound, params)
+    lives = loadLives()
+    players = loadEliminated()
+    if (!params.has('pool')) poolName = tournamentRound.pool
     try {
         mappools = await fetch('../mappools.json').then(response => response.json())
     } catch {
         mappools = {}
     }
-    document.getElementById('round-name').textContent = (mappools[poolName]?.round || poolName).toUpperCase()
+    const roundName = document.getElementById('round-name')
+    roundName.textContent = tournamentRound.name
+    roundName.parentElement.classList.toggle('long-round', roundName.textContent.length > 10)
+    roundName.parentElement.addEventListener('click', resetLobby)
+    addEventListener('storage', event => {
+        if (event.key !== tournamentState.key('lives') && event.key !== tournamentState.key('reset')) return
+        lives = loadLives()
+        if (event.key === tournamentState.key('reset')) {
+            players = loadEliminated()
+            roundState = null
+        }
+        renderLeaderboard(lobbyPlayers)
+    })
     if (previewMode) await startPreview()
     else connectTosu()
-    connectTwitch()
+    if (!previewMode) connectTwitch()
 }
 
 init()

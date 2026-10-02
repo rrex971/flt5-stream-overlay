@@ -28,6 +28,9 @@
     },
     {
       "name": "Finals Winners"
+    },
+    {
+      "name": "Grand Finals 1 Winners"
     }
   ],
   "current_scene": "Gameplay - 8 Players",
@@ -491,7 +494,7 @@
       "id": "browser_source",
       "versioned_id": "browser_source",
       "settings": {
-        "url": "http://127.0.0.1:24050/flt5-stream-overlay/gameplay/?clients=8",
+        "url": "http://127.0.0.1:24050/flt5-stream-overlay/gameplay/?clients=8&stage=grand-finals-1&pool=grand-finals",
         "width": 1920,
         "height": 1080,
         "reroute_audio": false,
@@ -527,7 +530,7 @@
       "id": "browser_source",
       "versioned_id": "browser_source",
       "settings": {
-        "url": "http://127.0.0.1:24050/flt5-stream-overlay/gameplay/?clients=10",
+        "url": "http://127.0.0.1:24050/flt5-stream-overlay/gameplay/?clients=10&stage=grand-finals-1&pool=grand-finals",
         "width": 1920,
         "height": 1080,
         "reroute_audio": false,
@@ -600,7 +603,7 @@
       "id": "browser_source",
       "versioned_id": "browser_source",
       "settings": {
-        "url": "http://127.0.0.1:24050/flt5-stream-overlay/pool-showcase/",
+        "url": "http://127.0.0.1:24050/flt5-stream-overlay/pool-showcase/?pool=grand-finals",
         "width": 1920,
         "height": 1080,
         "reroute_audio": false,
@@ -672,7 +675,7 @@
       "id": "browser_source",
       "versioned_id": "browser_source",
       "settings": {
-        "url": "http://127.0.0.1:24050/flt5-stream-overlay/schedule/?stage=finals",
+        "url": "http://127.0.0.1:24050/flt5-stream-overlay/schedule/?stage=grand-finals-1&stageId=1034",
         "width": 1920,
         "height": 1080,
         "reroute_audio": false,
@@ -2918,6 +2921,131 @@
           {
             "name": "FLT5 Finals Winners Overlay",
             "source_uuid": "c2610d4d-af3d-449a-adb4-20ba9a2ca767",
+            "visible": true,
+            "locked": true,
+            "rot": 0,
+            "scale_ref": {
+              "x": 1920,
+              "y": 1080
+            },
+            "align": 5,
+            "bounds_type": 0,
+            "bounds_align": 0,
+            "bounds_crop": false,
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0,
+            "id": 1,
+            "group_item_backup": false,
+            "pos": {
+              "x": 0,
+              "y": 0
+            },
+            "pos_rel": {
+              "x": -1.7777777777777777,
+              "y": -1
+            },
+            "scale": {
+              "x": 1,
+              "y": 1
+            },
+            "scale_rel": {
+              "x": 1,
+              "y": 1
+            },
+            "bounds": {
+              "x": 0,
+              "y": 0
+            },
+            "bounds_rel": {
+              "x": 0,
+              "y": 0
+            },
+            "scale_filter": "disable",
+            "blend_method": "default",
+            "blend_type": "normal",
+            "show_transition": {
+              "duration": 0
+            },
+            "hide_transition": {
+              "duration": 0
+            },
+            "private_settings": {}
+          }
+        ]
+      },
+      "mixers": 0,
+      "sync": 0,
+      "flags": 0,
+      "volume": 1,
+      "balance": 0.5,
+      "enabled": true,
+      "muted": false,
+      "push-to-mute": false,
+      "push-to-mute-delay": 0,
+      "push-to-talk": false,
+      "push-to-talk-delay": 0,
+      "hotkeys": {
+        "OBSBasic.SelectScene": [],
+        "libobs.show_scene_item.1": [],
+        "libobs.hide_scene_item.1": []
+      },
+      "deinterlace_mode": 0,
+      "deinterlace_field_order": 0,
+      "monitoring_type": 0,
+      "canvas_uuid": "6c69626f-6273-4c00-9d88-c5136d61696e",
+      "private_settings": {}
+    },
+    {
+      "prev_ver": 537001986,
+      "name": "FLT5 Grand Finals 1 Winners Overlay",
+      "uuid": "cfa05ac1-921e-4be1-a4ef-21516e0f61ca",
+      "id": "browser_source",
+      "versioned_id": "browser_source",
+      "settings": {
+        "url": "http://127.0.0.1:24050/flt5-stream-overlay/grand-finals-1-winners/",
+        "width": 1920,
+        "height": 1080,
+        "reroute_audio": false,
+        "shutdown": true
+      },
+      "mixers": 255,
+      "sync": 0,
+      "flags": 0,
+      "volume": 1,
+      "balance": 0.5,
+      "enabled": true,
+      "muted": false,
+      "push-to-mute": false,
+      "push-to-mute-delay": 0,
+      "push-to-talk": false,
+      "push-to-talk-delay": 0,
+      "hotkeys": {
+        "libobs.mute": [],
+        "libobs.unmute": [],
+        "libobs.push-to-mute": [],
+        "libobs.push-to-talk": [],
+        "ObsBrowser.Refresh": []
+      },
+      "deinterlace_mode": 0,
+      "deinterlace_field_order": 0,
+      "monitoring_type": 0,
+      "private_settings": {}
+    },
+    {
+      "prev_ver": 537001986,
+      "name": "Grand Finals 1 Winners",
+      "uuid": "7faf8ba2-3b05-499b-a733-2974c07d18a2",
+      "id": "scene",
+      "versioned_id": "scene",
+      "settings": {
+        "custom_size": false,
+        "id_counter": 1,
+        "items": [
+          {
+            "name": "FLT5 Grand Finals 1 Winners Overlay",
+            "source_uuid": "cfa05ac1-921e-4be1-a4ef-21516e0f61ca",
             "visible": true,
             "locked": true,
             "rot": 0,

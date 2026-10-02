@@ -32,9 +32,6 @@ let coverUrl = '';
 let coverRequest = 0;
 let mapCopyRequest = 0;
 let mapCopySignature = '';
-let badgeType = '';
-let badgeRequest = 0;
-let badgeAnimation = null;
 
 const compactNumber = value => Number.isFinite(Number(value)) ? Number(Number(value).toFixed(2)).toString() : '0';
 const readNumber = (...values) => {
@@ -71,50 +68,8 @@ const normalizeEntry = value => {
     return {};
 };
 
-const normalizeMatch = value => String(value || '').normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
-
-const resolveEntry = data => {
-    const id = String(data.beatmap?.id ?? '');
-    const difficulty = normalizeMatch(data.beatmap?.version || data.beatmap?.difficulty);
-    const title = normalizeMatch(data.beatmap?.title);
-    const contains = (value, keyword) => ` ${value} `.includes(` ${normalizeMatch(keyword)} `);
-    for (const value of Object.values(config.maps || {})) {
-        const entry = normalizeEntry(value);
-        if (entry.keywords?.some(keyword => contains(entry.matchField === 'difficulty' ? difficulty : `${title} ${difficulty}`, keyword))) return entry;
-    }
-    if (config.maps?.[id]) return normalizeEntry(config.maps[id]);
-    for (const [fragment, value] of Object.entries(config.custom || {})) {
-        if (contains(title, fragment) || contains(difficulty, fragment)) return normalizeEntry(value);
-    }
-    return {};
-};
-
-const setMapBadge = async type => {
-    const nextType = ['edit', 'custom'].includes(type) ? type : '';
-    if (nextType === badgeType) return;
-    badgeType = nextType;
-    const request = ++badgeRequest;
-    badgeAnimation?.cancel();
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!ui.badge.hidden && !reduced) {
-        badgeAnimation = ui.badge.animate([
-            { transform: 'perspective(450px) rotate(-4deg) rotateY(0)', opacity: 1 },
-            { transform: 'perspective(450px) translate(14px, -12px) rotate(-13deg) rotateY(-65deg)', opacity: 0 }
-        ], { duration: 170, easing: 'cubic-bezier(.16, 1, .3, 1)', fill: 'forwards' });
-        try { await badgeAnimation.finished; } catch {}
-        if (request !== badgeRequest) return;
-    }
-    ui.badge.hidden = !nextType;
-    badgeAnimation?.cancel();
-    if (!nextType) return;
-    ui.badge.dataset.type = nextType;
-    ui.badge.querySelector('span').textContent = nextType.toUpperCase();
-    if (reduced) return;
-    badgeAnimation = ui.badge.animate([
-        { transform: 'perspective(450px) translate(14px, -10px) rotate(9deg) rotateY(-50deg) scale(.94)', opacity: 0 },
-        { transform: 'perspective(450px) rotate(-4deg) rotateY(0) scale(1)', opacity: 1 }
-    ], { duration: 280, easing: 'cubic-bezier(.16, 1, .3, 1)' });
-};
+const resolveEntry = data => FLT5Pool.resolve(config, data.beatmap || {});
+const setMapBadge = FLT5Pool.createBadge(ui.badge);
 
 const colorForSlot = slot => slotColors[String(slot).slice(0, 2).toUpperCase()] || '#f598c9';
 
@@ -309,9 +264,7 @@ const loadConfig = async () => {
         if (!response.ok) throw new Error(String(response.status));
         const pools = await response.json();
         const params = new URLSearchParams(location.search);
-        const pool = normalizeMatch(params.get('pool') || 'grand-finals');
-        const poolKey = Object.keys(pools).find(key => normalizeMatch(key) === pool || normalizeMatch(key).replace(/ /g, '') === pool.replace(/ /g, ''));
-        config = pools[poolKey] || { round: '', slots: [], maps: {}, custom: {} };
+        config = FLT5Pool.find(pools, params.get('pool') || 'grand-finals');
     } catch {
         config = { round: '', slots: [], maps: {}, custom: {} };
     }
