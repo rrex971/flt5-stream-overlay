@@ -595,6 +595,54 @@ body {
     box-shadow: none;
 }
 
+.player-grade {
+    left: 25px;
+    bottom: 5px;
+    width: 43px;
+    height: 28px;
+    padding: 2px 3px;
+    border-width: 3px;
+    border-radius: 9px 6px 10px 7px;
+    background-size: 6px 6px;
+    font-size: 20px;
+    letter-spacing: .5px;
+    -webkit-text-stroke-width: 1.5px;
+    box-shadow: 0 3px 0 var(--pink-depth);
+    transform: rotate(-7deg);
+    pointer-events: none;
+}
+
+.player-grade[hidden] {
+    display: none;
+}
+
+.player-grade span {
+    transform: translateY(-1px);
+}
+
+.player-grade[data-grade="SS"],
+.player-grade[data-grade="S"] {
+    background-color: var(--yellow);
+}
+
+.player-grade[data-grade="SSH"],
+.player-grade[data-grade="SH"] {
+    background-color: #dbe6f2;
+    font-size: 17px;
+}
+
+.player-grade[data-grade="A"] {
+    background-color: var(--blue);
+}
+
+.player-grade[data-grade="B"] {
+    background-color: var(--lavender);
+}
+
+.player-grade[data-grade="C"] {
+    background-color: var(--peach);
+}
+
 .player-copy {
     min-width: 0;
 }

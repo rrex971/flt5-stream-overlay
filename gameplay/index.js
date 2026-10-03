@@ -173,6 +173,13 @@ function formatScore(value) {
     return Math.round(Number(value) || 0).toLocaleString('en-US')
 }
 
+function scoreGrade(rank) {
+    const value = String(rank?.current ?? (typeof rank === 'string' ? rank : '')).trim().toUpperCase()
+    if (value === 'X') return 'SS'
+    if (value === 'XH') return 'SSH'
+    return /^(SSH|SS|SH|S|A|B|C|D|F)$/.test(value) ? value : ''
+}
+
 function playerFromClient(client, index) {
     const user = client.user || client.spectating?.user || {}
     const play = client.play || client.gameplay || {}
@@ -182,6 +189,7 @@ function playerFromClient(client, index) {
         name: user.name || play.playerName || play.name || '',
         score: Number(play.score || 0),
         accuracy: Number(play.accuracy ?? play.acc ?? 0),
+        grade: scoreGrade(play.rank),
         misses: Number(play.hits?.['0'] ?? play.hits?.miss ?? play.hits?.misses ?? 0),
         mods: Array.isArray(mods) ? mods.join('') : String(mods || '')
     }
@@ -261,7 +269,7 @@ function createPlayerRow(player) {
     const row = document.createElement('div')
     row.className = 'player-row'
     row.dataset.key = key
-    row.innerHTML = `<img class="avatar" alt=""><div class="player-copy"><div class="player-head"><div class="player-name"></div><div class="player-accuracy"></div></div><div class="player-bottom"><div class="player-score"></div><div class="hearts"></div></div></div>`
+    row.innerHTML = `<img class="avatar" alt=""><div class="panel-sticker player-grade" hidden><span></span></div><div class="player-copy"><div class="player-head"><div class="player-name"></div><div class="player-accuracy"></div></div><div class="player-bottom"><div class="player-score"></div><div class="hearts"></div></div></div>`
     row.querySelector('.avatar').addEventListener('error', event => {
         event.currentTarget.style.opacity = '.24'
     })
@@ -367,6 +375,12 @@ function renderLeaderboard(nextPlayers) {
             avatar.style.opacity = ''
         }
         row.querySelector('.player-name').textContent = player.name
+        const grade = player.retained ? '' : scoreGrade(player.grade)
+        const gradeSticker = row.querySelector('.player-grade')
+        gradeSticker.hidden = !grade
+        gradeSticker.dataset.grade = grade
+        gradeSticker.querySelector('span').textContent = grade
+        gradeSticker.setAttribute('aria-label', `${player.name} score grade ${grade}`)
         const accuracy = Math.max(0, Math.min(100, Number(player.accuracy) || 0))
         if (player.retained) {
             if (row.accuracyCounter) row.accuracyCounter.reset()
@@ -736,14 +750,21 @@ async function startPreview() {
         ? Object.fromEntries(fields.map((field, index) => [field, player[index]]))
         : player)
     const pool = FLT5Pool.find(mappools, poolName)
+    const previewAccuracies = [100, 99.18, 96.84, 92.67, 98.62, 95.78, 90.96, 87.43, 83.5, 94.3]
+    const previewGrade = player => player.accuracy === 100 && !player.misses ? 'SS'
+        : player.accuracy >= 98 ? 'S'
+        : player.accuracy >= 94 ? 'A'
+        : player.accuracy >= 90 ? 'B'
+        : player.accuracy >= 85 ? 'C' : 'D'
     const previewPlayers = sourcePlayers.slice(0, previewPlayerCount).map((player, index) => ({
         id: Number(player.userId || player.user_id || player.id || 0),
         name: player.username || player.name,
         score: 970000 - index * 43811,
-        accuracy: 99.42 - index * .31,
+        accuracy: previewAccuracies[index],
         misses: index % 4,
         mods: ''
     }))
+    previewPlayers.forEach(player => { player.grade = previewGrade(player) })
     tournamentState.usePlayers(previewPlayers)
     lives = loadLives()
     const eliminatedCount = Math.min(2, Math.max(0, previewPlayers.length - 4))
@@ -760,12 +781,13 @@ async function startPreview() {
         eligible.forEach((player, index) => {
             const steadyGain = 8000 + ((index * 11 + phase * 17) % 6) * 2500
             player.score += index === chaser ? 220000 : index === runnerUp ? 100000 : steadyGain
-            player.accuracy = Math.max(94, Math.min(100, player.accuracy + (index === chaser ? .07 : -.02)))
+            player.accuracy = Math.max(80, Math.min(100, player.accuracy + (index === chaser ? .07 : -.02)))
             if (phase && phase % 9 === index % 9) player.misses += 1
+            player.grade = previewGrade(player)
         })
         const connected = eliminatedCount ? previewPlayers.slice(0, -1) : previewPlayers
         renderLeaderboard(connected)
-        renderClientSlots(connected.map(player => ({user: {id: player.id, name: player.name}, play: {score: player.score, accuracy: player.accuracy, hits: {'0': player.misses}}})))
+        renderClientSlots(connected.map(player => ({user: {id: player.id, name: player.name}, play: {score: player.score, accuracy: player.accuracy, rank: {current: player.grade}, hits: {'0': player.misses}}})))
         phase += 1
     }
     update()
