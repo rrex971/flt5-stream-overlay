@@ -1,6 +1,5 @@
 window.FLT5Tournament = (() => {
     const normalize = value => String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '')
-    const playerKey = player => String(player.id || player.name || '').toLowerCase()
     let config
 
     async function load() {
@@ -62,34 +61,13 @@ window.FLT5Tournament = (() => {
             return true
         }
 
-        function winners() {
-            const saved = read('winners', [])
-            return Array.isArray(saved) && saved.length === round.winners ? saved : []
-        }
-
-        function capture(players, lives) {
-            const saved = winners()
-            if (saved.length) return saved
-            const unique = [...new Map(players.filter(player => player.name).map(player => [playerKey(player), player])).values()]
-            if (unique.length > round.winners) write('started', true)
-            const remaining = unique.filter(player => {
-                const state = lives[playerKey(player)]
-                return !Array.isArray(state) || state.some(Boolean)
-            })
-            if (remaining.length !== round.winners) return []
-            if (!read('started', false) && !Object.values(lives).some(state => Array.isArray(state) && !state.some(Boolean))) return []
-            const result = remaining.map(player => ({id: Number(player.id || 0), name: player.name}))
-            write('winners', result)
-            return result
-        }
-
         function reset() {
             for (const kind of ['lives', 'eliminated', 'winners', 'last-deduction', 'started']) localStorage.removeItem(key(kind))
             write('reset', Date.now())
         }
 
-        return {key, read, write, usePlayers, winners, capture, reset}
+        return {key, read, write, usePlayers, reset}
     }
 
-    return {load, select, createState, playerKey}
+    return {load, select, createState}
 })()

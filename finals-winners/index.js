@@ -58,13 +58,16 @@ function update(data) {
     const clients = data?.tourney?.clients || data?.tourney?.ipcClients || []
     const players = clients.map(playerFromClient).filter(player => player.name)
     if (tournamentState.usePlayers(players)) render([])
-    if (round.key === 'grand-finals-1') {
-        render(tournamentState.capture(players, readLives()))
-        return
-    }
-    if (!players.length) return
     const lives = readLives()
     const remaining = players.filter(player => livesRemaining(player, lives) > 0)
+    if (round.key === 'grand-finals-1') {
+        render(remaining.length === round.winners ? remaining.sort((a, b) => b.score - a.score) : [])
+        return
+    }
+    if (!players.length) {
+        render([])
+        return
+    }
     const contenders = (remaining.length >= 2 ? remaining : players).sort((a, b) => b.score - a.score)
     render(contenders.slice(0, 2))
 }
@@ -100,11 +103,8 @@ async function init() {
     document.querySelector('.winner-list').setAttribute('aria-label', `${round.name} winners`)
     if (preview) await loadPreview()
     else {
-        if (round.key === 'grand-finals-1') render(tournamentState.winners())
         addEventListener('storage', event => {
-            if (event.key?.endsWith('-active-lobby')) tournamentState = FLT5Tournament.createState(round, params)
-            if (round.key === 'grand-finals-1' && (event.key === tournamentState.key('lives') || event.key === tournamentState.key('winners') || event.key?.endsWith('-active-lobby'))) render(tournamentState.winners())
-            else if (event.key === tournamentState.key('lives')) update(lastData)
+            if (event.key === tournamentState.key('lives') || event.key === tournamentState.key('reset')) update(lastData)
         })
         connect()
     }

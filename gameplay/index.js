@@ -125,7 +125,6 @@ function resetLobby() {
 
 function saveLives() {
     tournamentState.write('lives', lives)
-    if (tournamentRound.key === 'grand-finals-1' && !previewMode) tournamentState.capture(lobbyPlayers, lives)
 }
 
 function playerKey(player) {
@@ -409,7 +408,6 @@ function renderLeaderboard(nextPlayers) {
     renderScoreGaps(sorted, rowHeight, rowGap)
     updateClientHighlights()
     tournamentState.write('eliminated', sorted.filter(player => activeLives(player) === 0).map(({retained, ...player}) => player))
-    if (tournamentRound.key === 'grand-finals-1' && !previewMode) tournamentState.capture(validPlayers, lives)
 }
 
 function handleRound(playersNow, beatmapId, pointTotal, playing) {
