@@ -1,5 +1,5 @@
 {
-    "default": "grand-finals-1",
+    "default": "grandest-of-finals",
     "endpoint": "https://wybin.xyz/api/v1/tournament-stages/147",
     "rounds": {
         "finals": {
@@ -14,6 +14,7 @@
             "name": "GRAND FINALS 1",
             "pool": "grand-finals",
             "stageId": 1034,
+            "matchIds": [12218, 12217],
             "winners": 4,
             "advancesTo": "Grand Finals 2",
             "lobbies": [
@@ -83,6 +84,30 @@
                             "id": 12640485,
                             "name": "Smore Cookie"
                         }
+                    ]
+                }
+            ]
+        },
+        "grandest-of-finals": {
+            "name": "GRANDEST OF FINALS",
+            "pool": "grand-finals",
+            "stageId": 1034,
+            "matchIds": [12349],
+            "winners": 1,
+            "winnerMessage": "Congratulations on winning Fruit Loops Tournament 5",
+            "lobbies": [
+                {
+                    "id": 12349,
+                    "label": "GF",
+                    "players": [
+                        {"id": 14084526, "name": "Joyy"},
+                        {"id": 38952920, "name": "Dreems"},
+                        {"id": 11625617, "name": "ERA medium kek"},
+                        {"id": 19121768, "name": "sphlefy"},
+                        {"id": 39840050, "name": "Sabon"},
+                        {"id": 7512553, "name": "Utami"},
+                        {"id": 18658630, "name": "Prinow6"},
+                        {"id": 4641477, "name": "aaront"}
                     ]
                 }
             ]

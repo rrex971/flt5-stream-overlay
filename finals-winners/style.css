@@ -208,6 +208,36 @@ body {
     line-height: 1.12;
 }
 
+.single-winner .winner-banner p {
+    max-width: 1600px;
+    padding-inline: 20px;
+    font-size: 46px;
+    line-height: 1.3;
+    text-align: center;
+}
+
+.single-winner .winner-list {
+    top: 480px;
+}
+
+.single-winner .winner-card {
+    width: 1080px;
+    height: 350px;
+    gap: 42px;
+    padding: 30px;
+}
+
+.single-winner .winner-avatar {
+    width: 270px;
+    height: 270px;
+}
+
+.single-winner .winner-name {
+    max-width: 690px;
+    font-size: 72px;
+    line-height: 1.15;
+}
+
 @keyframes winner-in {
     from { opacity: 0; transform: translateY(22px) scale(.96) rotate(0deg); }
     to { opacity: 1; transform: translateY(0) scale(1) rotate(var(--tilt, -1deg)); }

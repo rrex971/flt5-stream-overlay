@@ -148,6 +148,10 @@ body {
     padding-inline: 24px;
 }
 
+.round-sticker.longest-round {
+    font-size: 25px;
+}
+
 .top-loops {
     position: absolute;
     left: 1000px;
@@ -216,6 +220,71 @@ body {
 .match-grid.two-up .schedule-avatar {
     width: 64px;
     height: 64px;
+}
+
+.match-grid.single-up {
+    width: 1440px;
+    margin-inline: auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+}
+
+.match-grid.single-up .match-card {
+    padding: 106px 40px 80px;
+}
+
+.match-grid.single-up .player-list {
+    height: 100%;
+    grid-auto-rows: minmax(0, 1fr);
+    gap: 12px 32px;
+}
+
+.match-grid.single-up .player {
+    gap: 24px;
+    padding-inline: 20px;
+    font-size: 38px;
+    line-height: 1.2;
+}
+
+.match-grid.single-up .schedule-avatar {
+    width: 108px;
+    height: 108px;
+    border-radius: 20px 14px 22px 16px;
+}
+
+.match-grid.single-up .match-time {
+    top: 25px;
+    right: 34px;
+}
+
+.match-grid.single-up .match-time span {
+    font-size: 22px;
+}
+
+.match-grid.single-up .match-time strong {
+    font-size: 32px;
+}
+
+.match-grid.single-up .match-footer {
+    left: 42px;
+    right: 390px;
+    bottom: 28px;
+}
+
+.match-grid.single-up .match-footer span {
+    font-size: 18px;
+}
+
+.match-grid.single-up .match-footer strong {
+    font-size: 26px;
+}
+
+.match-grid.single-up .relative-time {
+    right: 34px;
+    bottom: 24px;
+    min-width: 280px;
+    padding: 13px 18px 12px;
+    font-size: 23px;
 }
 
 .match-card {

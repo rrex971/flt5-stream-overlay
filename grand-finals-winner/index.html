@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FLT5 Grand Finals Winner</title>
+    <link rel="stylesheet" href="../finals-winners/style.css">
+</head>
+<body>
+    <main id="overlay" class="single-winner" data-round="grandest-of-finals">
+        <video class="background-art" src="../assets/background.webm" autoplay loop muted playsinline></video>
+        <div class="corner-logo"><img src="../assets/flt5-logo.png" alt="FLT5"></div>
+        <section class="winner-banner">
+            <h1>WINNER</h1>
+            <p>Congratulations on winning Fruit Loops Tournament 5</p>
+        </section>
+        <section class="winner-list" aria-label="Grandest of Finals winner">
+            <article class="winner-card" hidden>
+                <img class="winner-avatar" alt="">
+                <h2 class="winner-name"></h2>
+            </article>
+        </section>
+    </main>
+    <script src="../deps/reconnecting-websocket.min.js"></script>
+    <script src="../deps/tournament.js"></script>
+    <script src="../finals-winners/index.js"></script>
+    <script src="../deps/now-playing.js"></script>
+</body>
+</html>

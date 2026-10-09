@@ -145,7 +145,7 @@
         "custom": {}
     },
     "grand-finals": {
-        "round": "GRAND FINALS 1",
+        "round": "GRANDEST OF FINALS",
         "slots": ["NM1", "NM2", "NM3", "NM4", "HD1", "HD2", "HD3", "HR1", "HR2", "HR3", "DT1", "DT2", "DT3", "TB"],
         "maps": {
             "3198042": {"slot": "NM4", "artist": "Yorushika", "title": "Matasaburo", "difficulty": "Delight", "beatmapsetId": 1566187, "sr": 4.78, "bpm": 200, "length": "03:46", "cs": 4, "ar": 9.3, "od": 8.7, "hp": 6, "mapper": "Aragon"},

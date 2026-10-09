@@ -271,6 +271,7 @@ const loadConfig = async () => {
     const params = new URLSearchParams(location.search);
     ui.round.textContent = params.get('round') || config.round || '';
     ui.round.parentElement.classList.toggle('long-round', ui.round.textContent.length > 10);
+    ui.round.parentElement.classList.toggle('longest-round', ui.round.textContent.length > 15);
     renderSlots();
     applyPreview();
 };

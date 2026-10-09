@@ -454,6 +454,10 @@ body {
     padding-inline: 24px;
 }
 
+.round-sticker.longest-round {
+    font-size: 25px;
+}
+
 .leaderboard-panel,
 .info-panel {
     position: absolute;

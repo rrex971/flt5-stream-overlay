@@ -60,7 +60,7 @@ function update(data) {
     if (tournamentState.usePlayers(players)) render([])
     const lives = readLives()
     const remaining = players.filter(player => livesRemaining(player, lives) > 0)
-    if (round.key === 'grand-finals-1') {
+    if (round.key !== 'finals') {
         render(remaining.length === round.winners ? remaining.sort((a, b) => b.score - a.score) : [])
         return
     }
@@ -99,7 +99,7 @@ async function init() {
     await FLT5Tournament.load()
     round = FLT5Tournament.select(params, overlay.dataset.round || 'finals')
     tournamentState = FLT5Tournament.createState(round, params)
-    document.querySelector('.winner-banner p').textContent = `Advanced to ${round.advancesTo}`
+    document.querySelector('.winner-banner p').textContent = round.winnerMessage || `Advanced to ${round.advancesTo}`
     document.querySelector('.winner-list').setAttribute('aria-label', `${round.name} winners`)
     if (preview) await loadPreview()
     else {

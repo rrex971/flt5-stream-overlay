@@ -84,8 +84,6 @@ const matchPlayers = match => {
     return players.filter(player => player.name);
 };
 
-const playerNames = match => matchPlayers(match).map(player => player.name);
-
 const refereeNames = match => (match.assignedReferees || [])
     .map(entry => entry.user?.userOsu?.username || entry.user?.username)
     .filter(Boolean);
@@ -144,14 +142,16 @@ const createMatchCard = (match, index) => {
 };
 
 const render = stage => {
-    const matches = (stage?.matches || []).filter(match => !match.softDeleted).sort((a, b) => matchTimestamp(a) - matchTimestamp(b));
-    const nextSignature = JSON.stringify(matches.map(match => [match.id, match.date, match.time, playerNames(match), refereeNames(match)]));
+    const matches = (stage?.matches || []).filter(match => !match.softDeleted && (!round.matchIds || round.matchIds.includes(match.id))).sort((a, b) => matchTimestamp(a) - matchTimestamp(b));
+    const nextSignature = JSON.stringify(matches.map(match => [match.id, match.label, match.date, match.time, matchPlayers(match), refereeNames(match)]));
     ui.stage.textContent = stage?.id === round.stageId || !stage?.id ? round.name : stage.name.toUpperCase();
     ui.stage.parentElement.classList.toggle('long-round', ui.stage.textContent.length > 10);
+    ui.stage.parentElement.classList.toggle('longest-round', ui.stage.textContent.length > 15);
     if (nextSignature === signature) return;
     signature = nextSignature;
     ui.grid.classList.toggle('eight-up', matches.length > 6);
     ui.grid.classList.toggle('two-up', matches.length === 2);
+    ui.grid.classList.toggle('single-up', matches.length === 1);
     ui.grid.replaceChildren(...matches.map(createMatchCard));
     ui.empty.classList.toggle('visible', !matches.length);
     updateRelativeTimes();

@@ -282,6 +282,10 @@ body {
     padding-inline: 24px;
 }
 
+.round-sticker.longest-round {
+    font-size: 25px;
+}
+
 .map-badge {
     position: absolute;
     z-index: 5;

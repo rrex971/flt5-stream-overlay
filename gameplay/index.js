@@ -849,6 +849,7 @@ async function init() {
     const roundName = document.getElementById('round-name')
     roundName.textContent = tournamentRound.name
     roundName.parentElement.classList.toggle('long-round', roundName.textContent.length > 10)
+    roundName.parentElement.classList.toggle('longest-round', roundName.textContent.length > 15)
     roundName.parentElement.addEventListener('click', resetLobby)
     addEventListener('storage', event => {
         if (event.key !== tournamentState.key('lives') && event.key !== tournamentState.key('reset')) return
